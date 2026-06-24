@@ -37,6 +37,8 @@ window.RippleGlobe = {
         let scene, camera, renderer;
         let particleGlobe, ringGreen, ringBlue, ringGold, innerLattice, shockwaveRing;
         let origGlobePositions;
+        let satellites = [];
+        let satLinks;
         let mouseX = 0, mouseY = 0;
         let targetX = 0, targetY = 0;
         let windowHalfX = heroContainer.clientWidth / 2;
@@ -85,7 +87,7 @@ window.RippleGlobe = {
                 positions[i * 3 + 2] = radius * Math.cos(phi);
             }
 
-            // Save original positions for breathing waves
+            // Save original positions for breathing waves and cursor attraction
             origGlobePositions = new Float32Array(positions);
 
             globeGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -132,7 +134,9 @@ window.RippleGlobe = {
 
                 ringGeometry.setAttribute('position', new THREE.BufferAttribute(ringPositions, 3));
 
-                const ringTex = createCircleTexture(colorHex, 64);
+                // FIX: Convert colorHex number to a valid CSS Hex string for Canvas gradients
+                const colorStr = '#' + colorHex.toString(16).padStart(6, '0');
+                const ringTex = createCircleTexture(colorStr, 64);
                 const ringMaterial = new THREE.PointsMaterial({
                     size: 0.22,
                     map: ringTex,
@@ -154,19 +158,62 @@ window.RippleGlobe = {
             ringBlue = createOrbitingRing(0x3b82f6, 6.4, -Math.PI / 4, -Math.PI / 6); // Blue (Water Conservation)
             ringGold = createOrbitingRing(0xf59e0b, 6.8, Math.PI / 3, -Math.PI / 4);  // Gold (Carbon Reduction)
 
-            // Expanding 3D Shockwave Ring (Initially invisible)
-            const shockGeo = new THREE.RingGeometry(0.1, 4.5, 32);
+            // --- Advanced Physics Gravity Satellites ---
+            satellites = [];
+            const satCount = 6;
+            const satColors = [0x10b981, 0x3b82f6, 0xf59e0b, 0x8b5cf6, 0x34d399, 0xef4444];
+            
+            for (let i = 0; i < satCount; i++) {
+                // High-tech wireframe octahedron geometries for satellite nodes
+                const satGeo = new THREE.OctahedronGeometry(0.16, 0);
+                const satMat = new THREE.MeshBasicMaterial({
+                    color: satColors[i],
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.8,
+                    blending: THREE.AdditiveBlending
+                });
+                const satMesh = new THREE.Mesh(satGeo, satMat);
+                scene.add(satMesh);
+                
+                satellites.push({
+                    mesh: satMesh,
+                    color: satColors[i],
+                    distance: 5.5 + (i * 0.25) + Math.random() * 0.15,
+                    speed: 0.012 + (i * 0.004),
+                    angle: (i / satCount) * Math.PI * 2,
+                    tiltX: (Math.random() - 0.5) * Math.PI * 0.35,
+                    tiltZ: (Math.random() - 0.5) * Math.PI * 0.35,
+                    phase: Math.random() * 100
+                });
+            }
+
+            // Dynamic Satellite Link Lines (LineSegments)
+            const satLinkPositions = new Float32Array(satCount * 2 * 3); // 2 points per satellite, 3 coords each
+            const satLinkGeometry = new THREE.BufferGeometry();
+            satLinkGeometry.setAttribute('position', new THREE.BufferAttribute(satLinkPositions, 3));
+            
+            const satLinkMaterial = new THREE.LineBasicMaterial({
+                color: 0x10b981,
+                transparent: true,
+                opacity: 0.22,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+            satLinks = new THREE.LineSegments(satLinkGeometry, satLinkMaterial);
+            scene.add(satLinks);
+
+            // Replacing 2D Shockwave with 3D Spherical wireframe shell
+            const shockGeo = new THREE.SphereGeometry(radius * 0.95, 12, 12);
             const shockMat = new THREE.MeshBasicMaterial({
                 color: 0x10b981,
-                side: THREE.DoubleSide,
+                wireframe: true,
                 transparent: true,
                 opacity: 0,
                 blending: THREE.AdditiveBlending,
                 depthWrite: false
             });
             shockwaveRing = new THREE.Mesh(shockGeo, shockMat);
-            shockwaveRing.rotation.x = Math.PI / 6;
-            shockwaveRing.rotation.z = Math.PI / 12;
             scene.add(shockwaveRing);
 
             // Trigger hook for simulator clicks
@@ -273,7 +320,13 @@ window.RippleGlobe = {
 
             const time = performance.now() * 0.001;
 
-            // Apply mathematical wave displacements to Globe particles (Breathe effect)
+            // Project 3D cursor position in world space
+            const cursor3D = new THREE.Vector3(mouseX * 11, -mouseY * 8, 3);
+            // Transform mouse coordinate into globe local rotation frame
+            const localCursor = new THREE.Vector3().copy(cursor3D);
+            localCursor.applyEuler(new THREE.Euler(-particleGlobe.rotation.x, -particleGlobe.rotation.y, 0, 'YXZ'));
+
+            // Apply mathematical wave displacements and cursor attraction (Tidal Bulge)
             if (particleGlobe && origGlobePositions) {
                 const globePositionsArr = particleGlobe.geometry.attributes.position.array;
                 const pCount = origGlobePositions.length / 3;
@@ -291,15 +344,86 @@ window.RippleGlobe = {
                     const nz = oz / len;
                     
                     const angle = Math.atan2(ny, nx);
-                    // Beautiful organic wave morphing
+                    // Breathing wave
                     const wave = Math.sin(angle * 4 + time * 1.5) * Math.cos(nz * 2 + time) * 0.18;
                     const scale = 1.0 + wave;
                     
-                    globePositionsArr[i * 3] = ox * scale;
-                    globePositionsArr[i * 3 + 1] = oy * scale;
-                    globePositionsArr[i * 3 + 2] = oz * scale;
+                    let finalX = ox * scale;
+                    let finalY = oy * scale;
+                    let finalZ = oz * scale;
+                    
+                    // Mouse cursor tidal gravity attraction bulge
+                    const dx = localCursor.x - finalX;
+                    const dy = localCursor.y - finalY;
+                    const dz = localCursor.z - finalZ;
+                    const distSq = dx*dx + dy*dy + dz*dz;
+                    const dist = Math.sqrt(distSq);
+                    
+                    const attractRadius = 5.5;
+                    if (dist < attractRadius && dist > 0.05) {
+                        const force = (attractRadius - dist) / attractRadius;
+                        // Pull vertices towards cursor, boosted by simulator speedBoost
+                        const pull = force * 0.45 * (speedBoost * 0.6 + 0.4);
+                        finalX += (dx / dist) * pull;
+                        finalY += (dy / dist) * pull;
+                        finalZ += (dz / dist) * pull;
+                    }
+                    
+                    globePositionsArr[i * 3] = finalX;
+                    globePositionsArr[i * 3 + 1] = finalY;
+                    globePositionsArr[i * 3 + 2] = finalZ;
                 }
                 particleGlobe.geometry.attributes.position.needsUpdate = true;
+            }
+
+            // Animate Gravity Satellites & Connecting lines
+            if (satellites && satellites.length > 0 && satLinks) {
+                const satLinkPosArr = satLinks.geometry.attributes.position.array;
+                
+                satellites.forEach((sat, index) => {
+                    sat.angle += sat.speed * speedBoost * 0.7; // Speed perturbed by pulses
+                    
+                    // Elliptical parameters
+                    const radiusX = sat.distance;
+                    const radiusZ = sat.distance * 0.85;
+                    
+                    const timePhase = time * 1.5 + sat.phase;
+                    const noisePert = Math.sin(timePhase) * 0.22;
+                    
+                    // Calculate local 3D position
+                    let sx = (radiusX + noisePert) * Math.cos(sat.angle);
+                    let sy = Math.sin(timePhase) * 0.15; // Vertical bounce
+                    let sz = (radiusZ + noisePert) * Math.sin(sat.angle);
+                    
+                    // Apply tilt rotations
+                    const satPos = new THREE.Vector3(sx, sy, sz);
+                    satPos.applyAxisAngle(new THREE.Vector3(1, 0, 0), sat.tiltX);
+                    satPos.applyAxisAngle(new THREE.Vector3(0, 0, 1), sat.tiltZ);
+                    
+                    sat.mesh.position.copy(satPos);
+                    sat.mesh.rotation.x += 0.015;
+                    sat.mesh.rotation.y += 0.025;
+                    
+                    // Sat scale breathing
+                    const sScale = 1.0 + Math.sin(timePhase * 2) * 0.15;
+                    sat.mesh.scale.set(sScale, sScale, sScale);
+                    
+                    // Connect line: from projected surface point to satellite position
+                    const surfacePoint = new THREE.Vector3().copy(satPos).normalize().multiplyScalar(4.5);
+                    const lineIdx = index * 6;
+                    
+                    satLinkPosArr[lineIdx] = surfacePoint.x;
+                    satLinkPosArr[lineIdx + 1] = surfacePoint.y;
+                    satLinkPosArr[lineIdx + 2] = surfacePoint.z;
+                    
+                    satLinkPosArr[lineIdx + 3] = satPos.x;
+                    satLinkPosArr[lineIdx + 4] = satPos.y;
+                    satLinkPosArr[lineIdx + 5] = satPos.z;
+                });
+                
+                satLinks.geometry.attributes.position.needsUpdate = true;
+                // Pulsate connecting lines opacity
+                satLinks.material.opacity = 0.16 + Math.sin(time * 3) * 0.06;
             }
 
             if (!isDragging) {
@@ -317,10 +441,10 @@ window.RippleGlobe = {
                 ringGold.rotation.y -= 0.0010 * rotationFactor;
             }
 
-            // Animate Expanding Shockwave Ring
+            // Animate Expanding 3D wireframe shockwave shell
             if (shockwaveRing && shockwaveRing.material.opacity > 0) {
-                shockwaveRing.scale.x += 0.12;
-                shockwaveRing.scale.y += 0.12;
+                const scaleVal = shockwaveRing.scale.x + 0.12;
+                shockwaveRing.scale.set(scaleVal, scaleVal, scaleVal);
                 shockwaveRing.material.opacity -= 0.022;
             }
 
