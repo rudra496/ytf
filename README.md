@@ -1,6 +1,6 @@
 # RippleUp - Youth Sustainability Reward Journey 🍃
 
-RippleUp is a gamified behavior-change platform designed to empower urban youth to build climate-friendly habits through physical-plus-digital interventions. This project was conceptualized by **Team #12** (led by Saara Vishnoi, with members Rudra Sarker, Suchita, Priyamvada, Afsara, Nigel, Kate, Samia, Jabir, and Anastasia) to address the UNICEF-IUCN research findings that youth in Least Developed Countries have strong motivations to act but lack structured opportunities and micro-incentives.
+RippleUp is a gamified behavior-change platform designed to empower urban youth to build climate-friendly habits through physical-plus-digital interventions. This project was conceptualized by **Team #12** (led by Saara Vishnoi, with members Rudra Sarker, Jabir Tukur Bakiyawa, Samia Hossain, Nigel Hove, Catherine Waweru, SUCHITA SOMKUWAR, Priyamvada ., and Afsara Tasnim) to address the UNICEF-IUCN research findings that youth in Least Developed Countries have strong motivations to act but lack structured opportunities and micro-incentives.
 
 👉 **Live Site:** [https://rudra496.github.io/ytf/](https://rudra496.github.io/ytf/)
 
@@ -87,13 +87,12 @@ To deploy this project to GitHub Pages under the repository name `ytf`:
 ---
 
 ### 👥 Team #12 Core Members
-- **Saara Vishnoi** (Leader)
-- **Rudra Sarker** (SUST IPE Department, Lead Developer & Designer)
-- **Suchita**
-- **Priyamvada**
-- **Afsara**
-- **Nigel**
-- **Kate**
-- **Samia**
-- **Jabir**
-- **Anastasia**
+- **Saara Vishnoi** (Welfare Designer)
+- **Rudra Sarker** (Student | Founder | Project Developer | Tech Enthusiast)
+- **Jabir Tukur Bakiyawa** (Student)
+- **Samia Hossain** (Student)
+- **Nigel Hove**
+- **Catherine Waweru** (Student Sustainability)
+- **SUCHITA SOMKUWAR** (Teacher)
+- **Priyamvada .** (Student)
+- **Afsara Tasnim** (Development Professional & Disaster Management Graduate)
