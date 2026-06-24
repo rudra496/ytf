@@ -64,6 +64,7 @@ window.RippleGlobe = {
         // Action Data Ingestion Stream Particles
         let ingestParticles;
         let ingestMat;
+        let ingestGeo;
         let ingestData = [];
         const ingestCount = 50;
 
@@ -381,7 +382,7 @@ window.RippleGlobe = {
             }
 
             // --- Action Data Ingestion Stream Particles ---
-            const ingestGeo = new THREE.BufferGeometry();
+            ingestGeo = new THREE.BufferGeometry();
             const ingestPositions = new Float32Array(ingestCount * 3);
             const ingestColors = new Float32Array(ingestCount * 3);
             ingestGeo.setAttribute('position', new THREE.BufferAttribute(ingestPositions, 3));
@@ -745,6 +746,7 @@ window.RippleGlobe = {
                     curve.v1.x = midRadius * Math.cos(wobbleAngle);
                     curve.v1.y = Math.sin(time * 2.0 + i) * 0.45;
                     curve.v1.z = midRadius * Math.sin(wobbleAngle);
+                    curve.cacheArcLengths = null;
                     
                     const points = curve.getPoints(24);
                     fieldLines[i].geometry.setFromPoints(points);
