@@ -1,6 +1,6 @@
 # RippleUp - Youth Sustainability Reward Journey 🍃
 
-RippleUp is a gamified behavior-change platform designed to empower urban youth to build climate-friendly habits through physical-plus-digital interventions. This project was conceptualized by **Team #12** (led by Saara Vishnoi, with members Rudra Sarker, Jabir Tukur Bakiyawa, Samia Hossain, Nigel Hove, Catherine Waweru, SUCHITA SOMKUWAR, Priyamvada ., and Afsara Tasnim) to address the UNICEF-IUCN research findings that youth in Least Developed Countries have strong motivations to act but lack structured opportunities and micro-incentives.
+RippleUp is a gamified behavior-change platform designed to empower urban youth to build climate-friendly habits through physical-plus-digital interventions. This project was conceptualized by **Team #12** (led by Saara Vishnoi, with members Rudra Sarker, Suchita Somkuwar, Priyamvada, Afsara Tasnim, Samia Hossain, Catherine Waweru, Jabir Tukur Bakiyawa, Nigel Hove, and Anastasia Ayvazyan) to address the UNICEF-IUCN research findings that youth in Least Developed Countries have strong motivations to act but lack structured opportunities and micro-incentives.
 
 👉 **Live Site:** [https://rudra496.github.io/ytf/](https://rudra496.github.io/ytf/)
 
@@ -87,12 +87,13 @@ To deploy this project to GitHub Pages under the repository name `ytf`:
 ---
 
 ### 👥 Team #12 Core Members
-- **Saara Vishnoi** (Welfare Designer)
-- **Rudra Sarker** (Student | Founder | Project Developer | Tech Enthusiast)
-- **Jabir Tukur Bakiyawa** (Student)
-- **Samia Hossain** (Student)
-- **Nigel Hove**
-- **Catherine Waweru** (Student Sustainability)
-- **SUCHITA SOMKUWAR** (Teacher)
-- **Priyamvada .** (Student)
-- **Afsara Tasnim** (Development Professional & Disaster Management Graduate)
+- **Saara Vishnoi** (Product/UI/UX & Welfare Designer - Lead) — [LinkedIn](https://www.linkedin.com/in/saara-vishnoi-115444336/)
+- **Rudra Sarker** (Student | Founder | Project Developer | Tech Enthusiast) — [LinkedIn](https://www.linkedin.com/in/rudrasarker)
+- **Suchita Somkuwar** (Tech Team) — [LinkedIn](https://www.linkedin.com/in/suchita-somkuwar)
+- **Priyamvada** (Tech Team) — [LinkedIn](https://www.linkedin.com/in/priyamvada-chauhan-6570bb334)
+- **Afsara Tasnim** (Stakeholder Survey Analyst) — [LinkedIn](https://www.linkedin.com/in/afsara-tasnim-/)
+- **Samia Hossain** (Stakeholder Interviewer)
+- **Catherine Waweru** (Stakeholder Interviewer) — [LinkedIn](https://www.linkedin.com/in/catherine-waweru-06a12294/)
+- **Jabir Tukur Bakiyawa** (Tech & Research Support) — [LinkedIn](https://www.linkedin.com/in/jabir-tukur-bakiyawa)
+- **Nigel Hove** (Eco Activist) — [LinkedIn](https://www.linkedin.com/in/nigel-hove-41426a345)
+- **Anastasia Ayvazyan** (Economics & Finance)

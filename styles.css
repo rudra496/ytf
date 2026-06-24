@@ -1953,3 +1953,256 @@ button {
         display: none;
     }
 }
+
+/* ==========================================================================
+   SDG Badges Section
+   ========================================================================== */
+.sdg-container {
+    margin-top: 4rem;
+    text-align: center;
+}
+
+.sdg-title {
+    font-family: var(--font-outfit);
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: var(--text-main);
+    position: relative;
+    display: inline-block;
+}
+
+.sdg-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 999px;
+}
+
+.sdg-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+}
+
+.sdg-card {
+    padding: 1.25rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-top: 3px solid var(--sdg-color) !important;
+    transition: var(--transition);
+}
+
+.sdg-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    border-color: var(--sdg-color) !important;
+}
+
+.sdg-number {
+    font-family: var(--font-outfit);
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--sdg-color);
+}
+
+.sdg-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* ==========================================================================
+   4-Pillar Research Section
+   ========================================================================== */
+.research-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.research-card-pillar {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.pillar-icon {
+    font-size: 2rem;
+}
+
+.research-card-pillar h3 {
+    font-size: 1.35rem;
+    font-family: var(--font-outfit);
+    color: #fff;
+}
+
+.pillar-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.stats-box-mini {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-glass);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+}
+
+.stat-box-val {
+    font-family: var(--font-outfit);
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+}
+
+.stat-box-lbl {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.3;
+}
+
+.pillar-foot-details {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-glass);
+    padding-top: 0.75rem;
+    margin-top: auto;
+}
+
+.journey-steps-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.journey-steps-list li {
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-muted);
+}
+
+.step-bullet {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+
+.interviews-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.interview-snippet {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.01);
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-left: 2px solid var(--primary);
+}
+
+.interview-snippet em {
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.journey-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.journey-pill {
+    font-size: 0.75rem;
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--info);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.pillar-quote {
+    font-style: italic;
+    border-left: 2px solid var(--primary);
+    padding-left: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-top: auto;
+}
+
+/* ==========================================================================
+   Member Links & Custom Hover Styles
+   ========================================================================== */
+.member-link {
+    color: var(--text-main);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: var(--transition);
+}
+
+.member-link:hover {
+    color: var(--primary);
+}
+
+.member-link i {
+    font-size: 0.75rem;
+    color: var(--primary);
+    opacity: 0.6;
+    transition: var(--transition);
+}
+
+.member-link:hover i {
+    opacity: 1;
+    transform: scale(1.15);
+}
+
+/* ==========================================================================
+   Responsive Research & SDG Adaptations
+   ========================================================================== */
+@media (max-width: 992px) {
+    .sdg-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .research-grid-4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .sdg-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
