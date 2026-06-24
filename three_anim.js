@@ -181,12 +181,14 @@ window.RippleGlobe = {
 
             // Event listeners
             window.addEventListener('resize', onHeroResize);
-            heroContainer.addEventListener('mousemove', onHeroMouseMove);
             heroContainer.addEventListener('mousedown', onHeroMouseDown);
-            heroContainer.addEventListener('mousemove', onHeroMouseMoveDrag);
+            heroContainer.addEventListener('mousemove', onHeroMouseMove); // Camera pan on hover
+            window.addEventListener('mousemove', onHeroMouseMoveDrag); // Globe drag rotation
             window.addEventListener('mouseup', onHeroMouseUp);
-            heroContainer.addEventListener('touchstart', onHeroTouchStart, { passive: true });
-            heroContainer.addEventListener('touchmove', onHeroTouchMove, { passive: true });
+            
+            // Touch Support (uses non-passive to allow preventing default page scroll while dragging)
+            heroContainer.addEventListener('touchstart', onHeroTouchStart, { passive: false });
+            window.addEventListener('touchmove', onHeroTouchMove, { passive: false });
             window.addEventListener('touchend', onHeroMouseUp);
         }
 
@@ -242,6 +244,8 @@ window.RippleGlobe = {
 
         function onHeroTouchMove(event) {
             if (!isDragging || event.touches.length !== 1) return;
+            // Prevent default page scrolling when dragging the eco-globe
+            if (event.cancelable) event.preventDefault();
             const deltaMove = {
                 x: event.touches[0].clientX - previousMousePosition.x,
                 y: event.touches[0].clientY - previousMousePosition.y

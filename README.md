@@ -1,6 +1,6 @@
 # RippleUp - Youth Sustainability Reward Journey 🍃
 
-RippleUp is a gamified behavior-change platform designed to empower urban youth to build climate-friendly habits through physical-plus-digital interventions. This project was conceptualized by **Team #12** (led by Saara Vishnoi, with members Rudra Sarker, Suchita Somkuwar, Priyamvada, Afsara Tasnim, Samia Hossain, Catherine Waweru, Jabir Tukur Bakiyawa, Nigel Hove, and Anastasia Ayvazyan) to address the UNICEF-IUCN research findings that youth in Least Developed Countries have strong motivations to act but lack structured opportunities and micro-incentives.
+RippleUp is a gamified behavior-change platform designed to empower urban youth to build climate-friendly habits through physical-plus-digital interventions. This project was conceptualized by **Youth for Tomorrow** (led by Saara Vishnoi, with members Rudra Sarker, Suchita Somkuwar, Priyamvada, Afsara Tasnim, Samia Hossain, Catherine Waweru, Jabir Tukur Bakiyawa, Nigel Hove, and Anastasia Ayvazyan) to address the UNICEF-IUCN research findings that youth in Least Developed Countries have strong motivations to act but lack structured opportunities and micro-incentives.
 
 👉 **Live Site:** [https://rudra496.github.io/ytf/](https://rudra496.github.io/ytf/)
 
@@ -19,7 +19,7 @@ RippleUp is a gamified behavior-change platform designed to empower urban youth 
 3. **Interactive User Journey Storyboard**:
    - A step-by-step slider illustrating the full RippleUp MVP user flow (10 panels).
 4. **Community Standings**:
-   - Interactive leaderboard toggles to view team rankings (highlighting Team #12) and top individual contributors.
+   - Interactive leaderboard toggles to view team rankings (highlighting Youth for Tomorrow) and top individual contributors.
 5. **Research & Stakeholder Insights**:
    - Outlines the problem statement, UNICEF-IUCN findings, and contains transcripts of stakeholder interviews (Ridwan, Tanvir) that guided the product design.
 
@@ -86,7 +86,7 @@ To deploy this project to GitHub Pages under the repository name `ytf`:
 
 ---
 
-### 👥 Team #12 Core Members
+### 👥 Youth for Tomorrow Core Members
 - **Saara Vishnoi** (Product/UI/UX & Welfare Designer - Lead) — [LinkedIn](https://www.linkedin.com/in/saara-vishnoi-115444336/)
 - **Rudra Sarker** (Student | Founder | Project Developer | Tech Enthusiast) — [LinkedIn](https://www.linkedin.com/in/rudrasarker)
 - **Suchita Somkuwar** (Tech Team) — [LinkedIn](https://www.linkedin.com/in/suchita-somkuwar)
