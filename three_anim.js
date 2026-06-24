@@ -53,6 +53,7 @@ window.RippleGlobe = {
 
         // Centrifugal rotation velocity for equatorial bulge
         let rotationVelocity = 0;
+        const radius = 4.5;
 
         // Aurora Magnetic Field Curves and Flowing Particles
         let fieldCurves = [];
@@ -130,6 +131,7 @@ window.RippleGlobe = {
             renderer.setSize(heroContainer.clientWidth, heroContainer.clientHeight || 1);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             heroContainer.appendChild(renderer.domElement);
+            renderer.domElement.style.display = "block";
 
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
             scene.add(ambientLight);
@@ -142,7 +144,6 @@ window.RippleGlobe = {
             const particleCount = 280;
             const globeGeometry = new THREE.BufferGeometry();
             const positions = new Float32Array(particleCount * 3);
-            const radius = 4.5;
 
             for (let i = 0; i < particleCount; i++) {
                 const phi = Math.acos(-1 + (2 * i) / particleCount);
@@ -883,6 +884,7 @@ window.RippleGlobe = {
             bgRenderer.setSize(window.innerWidth, window.innerHeight);
             bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
             bgContainer.appendChild(bgRenderer.domElement);
+            bgRenderer.domElement.style.display = "block";
             
             const greenTexture = createCircleTexture('rgba(16, 185, 129, 0.75)', 64);
             const goldTexture = createCircleTexture('rgba(245, 158, 11, 0.75)', 64);

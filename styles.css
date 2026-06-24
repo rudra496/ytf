@@ -82,6 +82,15 @@ button {
     z-index: -2;
     pointer-events: none;
 }
+#canvas-container canvas {
+    display: block;
+}
+
+#three-orbit-canvas canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
 
 /* ==========================================================================
    Reusable UI Components (Glassmorphism, CTA buttons, Text effects)
@@ -2532,3 +2541,464 @@ button {
     display: inline-block;
 }
 
+
+/* ==========================================================================
+   COMPREHENSIVE RESPONSIVE OVERRIDES (v3.0)
+   Cross-browser · Android · iOS · Desktop compatibility
+   ========================================================================== */
+
+/* Tap highlight + touch UX */
+button, a, .cta-button, .action-btn, .control-btn, .dot, .nav-link,
+.drawer-link, .tab-btn, .preset-btn, .phone-nav-btn {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth touch scrolling on phone mockup */
+.phone-app-content {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent text selection on drag interactions */
+.three-display-card {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+/* ===== LARGE DESKTOP (> 1200px) ===== */
+@media (min-width: 1201px) {
+    .hero-section {
+        padding: 9rem 2rem 6rem 2rem;
+    }
+}
+
+/* ===== TABLET / SMALL LAPTOP (max 1024px) ===== */
+@media (max-width: 1024px) {
+    .hero-section {
+        padding: 8rem 1.5rem 4rem 1.5rem;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+    }
+
+    .three-display-card {
+        height: 340px;
+    }
+
+    .storyboard-container {
+        padding: 2rem;
+    }
+
+    .simulator-controls,
+    .research-text,
+    .research-interviews {
+        padding: 2rem;
+    }
+
+    .header-container {
+        padding: 1rem 1.5rem;
+    }
+
+    #nav-menu ul {
+        gap: 1.25rem;
+    }
+
+    .nav-link {
+        font-size: 0.9rem;
+    }
+}
+
+/* ===== MOBILE (max 768px) — Enhanced ===== */
+@media (max-width: 768px) {
+    /* Hero */
+    .hero-section {
+        padding: 6rem 1rem 3rem 1rem;
+    }
+
+    .hero-container {
+        gap: 2rem;
+    }
+
+    .hero-title {
+        font-size: 2.25rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .hero-stats {
+        gap: 1.25rem;
+    }
+
+    .stat-number {
+        font-size: 1.4rem;
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+    }
+
+    /* Globe card */
+    .three-display-card {
+        height: 300px;
+        padding: 1.25rem;
+    }
+
+    .three-label {
+        font-size: 1rem;
+    }
+
+    /* Header */
+    .header-container {
+        padding: 0.75rem 1rem;
+    }
+
+    #logo {
+        font-size: 1.25rem;
+    }
+
+    /* About */
+    .about-section {
+        padding: 4rem 1rem;
+    }
+
+    .about-card {
+        padding: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.85rem;
+    }
+
+    .section-subtitle {
+        font-size: 0.95rem;
+    }
+
+    /* Storyboard */
+    .storyboard-section {
+        padding: 4rem 1rem;
+    }
+
+    .storyboard-container {
+        padding: 1.5rem;
+    }
+
+    .story-slider {
+        min-height: auto;
+    }
+
+    .story-slide {
+        position: relative;
+        display: none;
+    }
+
+    .story-slide.active {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .story-image-placeholder {
+        height: 180px;
+    }
+
+    .slide-heading {
+        font-size: 1.4rem;
+    }
+
+    .slide-desc {
+        font-size: 0.95rem;
+    }
+
+    /* Simulator */
+    .simulator-section {
+        padding: 4rem 1rem;
+    }
+
+    .simulator-controls {
+        padding: 1.5rem;
+    }
+
+    .phone-mockup {
+        width: 280px;
+        height: 560px;
+        border-width: 8px;
+        border-radius: 32px;
+    }
+
+    /* Leaderboard */
+    .leaderboard-section {
+        padding: 4rem 1rem;
+    }
+
+    .leaderboard-card {
+        padding: 1rem;
+    }
+
+    .leaderboard-tabs {
+        flex-wrap: wrap;
+    }
+
+    /* Research */
+    .research-section {
+        padding: 4rem 1rem;
+    }
+
+    .research-card-pillar {
+        padding: 1.5rem;
+    }
+
+    /* Footer */
+    #main-footer {
+        padding: 3rem 1rem 2rem 1rem;
+    }
+
+    .footer-bottom {
+        font-size: 0.75rem;
+    }
+
+    /* Calculator */
+    .calculator-container {
+        padding: 0.5rem 0;
+    }
+}
+
+/* ===== SMALL PHONES (max 480px) ===== */
+@media (max-width: 480px) {
+    /* Hero */
+    .hero-section {
+        padding: 5.5rem 0.75rem 2.5rem 0.75rem;
+    }
+
+    .hero-title {
+        font-size: 1.85rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .hero-buttons {
+        flex-wrap: wrap;
+    }
+
+    .hero-stats {
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .stat-number {
+        font-size: 1.2rem;
+    }
+
+    .stat-divider {
+        display: none;
+    }
+
+    /* Globe */
+    .three-display-card {
+        height: 260px;
+        padding: 1rem;
+    }
+
+    .three-label {
+        font-size: 0.9rem;
+    }
+
+    .three-instructions {
+        font-size: 0.7rem;
+    }
+
+    /* Sections */
+    .section-title {
+        font-size: 1.6rem;
+    }
+
+    .section-header {
+        margin-bottom: 2.5rem;
+    }
+
+    /* About */
+    .about-section {
+        padding: 3rem 0.75rem;
+    }
+
+    /* Storyboard */
+    .storyboard-section {
+        padding: 3rem 0.75rem;
+    }
+
+    .storyboard-container {
+        padding: 1rem;
+    }
+
+    .story-image-placeholder {
+        height: 150px;
+    }
+
+    .slide-heading {
+        font-size: 1.2rem;
+    }
+
+    /* Simulator */
+    .simulator-section {
+        padding: 3rem 0.75rem;
+    }
+
+    .simulator-controls {
+        padding: 1.25rem;
+    }
+
+    .phone-mockup {
+        width: 260px;
+        height: 520px;
+        border-width: 7px;
+    }
+
+    /* Leaderboard */
+    .leaderboard-section {
+        padding: 3rem 0.75rem;
+    }
+
+    .leaderboard-card {
+        padding: 0.75rem;
+    }
+
+    .leader-row {
+        padding: 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .tab-btn {
+        padding: 0.4rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    /* Research */
+    .research-section {
+        padding: 3rem 0.75rem;
+    }
+
+    .research-card-pillar {
+        padding: 1.25rem;
+    }
+
+    /* Footer */
+    #main-footer {
+        padding: 2.5rem 0.75rem 1.5rem 0.75rem;
+    }
+
+    .footer-container {
+        gap: 2rem;
+    }
+
+    /* CTA buttons */
+    .cta-button {
+        padding: 0.65rem 1.25rem;
+        font-size: 0.9rem;
+    }
+
+    /* Badges / pills */
+    .badge-pill {
+        padding: 0.2rem 0.6rem;
+    }
+
+    .pill-text {
+        font-size: 0.75rem;
+    }
+}
+
+/* ===== VERY SMALL PHONES (max 360px) ===== */
+@media (max-width: 360px) {
+    .hero-title {
+        font-size: 1.6rem;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .hero-buttons .cta-button {
+        width: 100%;
+    }
+
+    .three-display-card {
+        height: 230px;
+    }
+
+    .phone-mockup {
+        width: 240px;
+        height: 480px;
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+    }
+
+    .slide-heading {
+        font-size: 1.1rem;
+    }
+
+    .storyboard-container {
+        padding: 0.75rem;
+    }
+
+    .leaderboard-tabs {
+        gap: 0.5rem;
+    }
+
+    .tab-btn {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .header-container {
+        padding: 0.6rem 0.75rem;
+    }
+
+    #logo {
+        font-size: 1.1rem;
+    }
+}
+
+/* ===== ANDROID-SPECIFIC FIXES ===== */
+/* Fix 100vh issue on mobile Chrome/Safari */
+@media (max-width: 768px) {
+    #canvas-container {
+        height: 100dvh;
+        height: 100vh; /* fallback */
+    }
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Landscape phone fixes */
+@media (max-width: 900px) and (orientation: landscape) {
+    .hero-section {
+        padding: 5rem 1rem 2rem 1rem;
+    }
+
+    .hero-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .three-display-card {
+        height: 220px;
+    }
+}
