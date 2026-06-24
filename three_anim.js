@@ -41,8 +41,8 @@ window.RippleGlobe = {
         let satLinks;
         let mouseX = 0, mouseY = 0;
         let targetX = 0, targetY = 0;
-        let windowHalfX = heroContainer.clientWidth / 2;
-        let windowHalfY = heroContainer.clientHeight / 2;
+        let windowHalfX = 0;
+        let windowHalfY = 0;
         
         // Drag rotation state
         let isDragging = false;
@@ -56,6 +56,7 @@ window.RippleGlobe = {
 
         // Aurora Magnetic Field Curves and Flowing Particles
         let fieldCurves = [];
+        let fieldLines = [];
         const fieldLineCount = 6;
         let fieldParticles;
         let fieldParticlesData = [];
@@ -66,8 +67,57 @@ window.RippleGlobe = {
         let ingestData = [];
         const ingestCount = 50;
 
-        initHero();
-        animateHero();
+        // Advanced Connection Energy Pulses
+        let connParticles;
+        let connParticlesData = [];
+
+        let heroInitialized = false;
+
+        function tryInitHero() {
+            if (heroInitialized) return;
+            if (heroContainer.clientWidth > 0 && heroContainer.clientHeight > 0) {
+                heroInitialized = true;
+                windowHalfX = heroContainer.clientWidth / 2;
+                windowHalfY = heroContainer.clientHeight / 2;
+                initHero();
+                animateHero();
+            }
+        }
+
+        // Try initializing immediately
+        tryInitHero();
+
+        // Listen to window load and DOMContentLoaded
+        window.addEventListener('load', tryInitHero);
+        document.addEventListener('DOMContentLoaded', tryInitHero);
+
+        // Robust Auto-Resize: Handles load timing and media collapses
+        if (typeof ResizeObserver !== 'undefined') {
+            const ro = new ResizeObserver(entries => {
+                for (let entry of entries) {
+                    const { width, height } = entry.contentRect;
+                    if (width > 0 && height > 0) {
+                        if (!heroInitialized) {
+                            tryInitHero();
+                        } else {
+                            onHeroResize();
+                        }
+                    }
+                }
+            });
+            ro.observe(heroContainer);
+        } else {
+            // Fallback: poll size using requestAnimationFrame
+            const pollSize = () => {
+                if (!heroInitialized) {
+                    tryInitHero();
+                    if (!heroInitialized) {
+                        requestAnimationFrame(pollSize);
+                    }
+                }
+            };
+            pollSize();
+        }
 
         function initHero() {
             scene = new THREE.Scene();
@@ -199,7 +249,10 @@ window.RippleGlobe = {
                     angle: (i / satCount) * Math.PI * 2,
                     tiltX: (Math.random() - 0.5) * Math.PI * 0.35,
                     tiltZ: (Math.random() - 0.5) * Math.PI * 0.35,
-                    phase: Math.random() * 100
+                    phase: Math.random() * 100,
+                    // Spring-physics velocity and offsets for cursor gravity reaction
+                    offsetPos: new THREE.Vector3(0, 0, 0),
+                    vel: new THREE.Vector3(0, 0, 0)
                 });
             }
 
@@ -218,6 +271,38 @@ window.RippleGlobe = {
             satLinks = new THREE.LineSegments(satLinkGeometry, satLinkMaterial);
             scene.add(satLinks);
 
+            // --- Advanced Connection Energy Pulses ---
+            const pulsePerSat = 4;
+            const connParticleCount = satCount * pulsePerSat;
+            const connGeo = new THREE.BufferGeometry();
+            const connPositions = new Float32Array(connParticleCount * 3);
+            connGeo.setAttribute('position', new THREE.BufferAttribute(connPositions, 3));
+            
+            const connTex = createCircleTexture('rgba(52, 211, 153, 0.95)', 32);
+            const connMat = new THREE.PointsMaterial({
+                size: 0.15,
+                map: connTex,
+                transparent: true,
+                opacity: 0.85,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                color: 0x6ee7b7
+            });
+            
+            connParticles = new THREE.Points(connGeo, connMat);
+            scene.add(connParticles);
+            
+            connParticlesData = [];
+            for (let i = 0; i < satCount; i++) {
+                for (let p = 0; p < pulsePerSat; p++) {
+                    connParticlesData.push({
+                        satIndex: i,
+                        t: p / pulsePerSat, // space out starting progress
+                        speed: 0.008 + Math.random() * 0.006
+                    });
+                }
+            }
+
             // Replacing 2D Shockwave with 3D Spherical wireframe shell
             const shockGeo = new THREE.SphereGeometry(radius * 0.95, 12, 12);
             const shockMat = new THREE.MeshBasicMaterial({
@@ -233,6 +318,7 @@ window.RippleGlobe = {
 
             // --- Advanced Aurora Magnetic Field Curves ---
             fieldCurves = [];
+            fieldLines = [];
             const fieldLinesGroup = new THREE.Group();
             scene.add(fieldLinesGroup);
             
@@ -262,6 +348,7 @@ window.RippleGlobe = {
                 });
                 const lineMesh = new THREE.Line(lineGeo, lineMat);
                 fieldLinesGroup.add(lineMesh);
+                fieldLines.push(lineMesh);
             }
             
             // Aurora Flowing Particles
@@ -343,19 +430,30 @@ window.RippleGlobe = {
                 const colorObj = new THREE.Color(colorHex || 0x10b981);
                 const colorsArr = ingestGeo.attributes.color.array;
                 
+                // Choose a random start point on the surface of the globe (radius = 4.5)
+                const phi = Math.random() * Math.PI * 2;
+                const theta = Math.acos(Math.random() * 2 - 1);
+                const startPoint = new THREE.Vector3(
+                    radius * Math.sin(theta) * Math.cos(phi),
+                    radius * Math.sin(theta) * Math.sin(phi),
+                    radius * Math.cos(theta)
+                );
+                
                 ingestData.forEach((p, idx) => {
                     p.active = true;
                     p.t = 0;
                     p.targetSat = Math.floor(Math.random() * satellites.length);
-                    p.pos.set(0, 0, 0); // start at center
+                    p.startPos = new THREE.Vector3().copy(startPoint);
                     
-                    const angle = Math.random() * Math.PI * 2;
-                    const speed = 0.1 + Math.random() * 0.25;
-                    p.vel.set(
-                        Math.cos(angle) * speed,
-                        (Math.random() - 0.5) * speed,
-                        Math.sin(angle) * speed
-                    );
+                    // Add small offset to start positions to spread them out
+                    p.startPos.x += (Math.random() - 0.5) * 0.5;
+                    p.startPos.y += (Math.random() - 0.5) * 0.5;
+                    p.startPos.z += (Math.random() - 0.5) * 0.5;
+                    
+                    // Spiral parameters
+                    p.spiralSpeed = 5 + Math.random() * 8; // spiral revolutions
+                    p.spiralRadius = 0.5 + Math.random() * 1.5;
+                    p.speed = 0.015 + Math.random() * 0.015;
                     
                     // Set color
                     colorsArr[idx * 3] = colorObj.r;
@@ -379,18 +477,7 @@ window.RippleGlobe = {
             window.addEventListener('touchmove', onHeroTouchMove, { passive: false });
             window.addEventListener('touchend', onHeroMouseUp);
 
-            // Robust Auto-Resize: Handles load timing and media collapses
-            if (typeof ResizeObserver !== 'undefined') {
-                const ro = new ResizeObserver(entries => {
-                    for (let entry of entries) {
-                        const { width, height } = entry.contentRect;
-                        if (width > 0 && height > 0) {
-                            onHeroResize();
-                        }
-                    }
-                });
-                ro.observe(heroContainer);
-            }
+            // ResizeObserver moved to outer scope
         }
 
         function onHeroResize() {
@@ -547,7 +634,7 @@ window.RippleGlobe = {
                 particleGlobe.geometry.attributes.position.needsUpdate = true;
             }
 
-            // Animate Gravity Satellites & Connecting lines
+            // Animate Gravity Satellites (Advanced Spring-Mass-Damper Physics) & Connecting lines
             if (satellites && satellites.length > 0 && satLinks) {
                 const satLinkPosArr = satLinks.geometry.attributes.position.array;
                 
@@ -561,24 +648,45 @@ window.RippleGlobe = {
                     const timePhase = time * 1.5 + sat.phase;
                     const noisePert = Math.sin(timePhase) * 0.22;
                     
-                    // Calculate local 3D position
+                    // Calculate local 3D base position
                     let sx = (radiusX + noisePert) * Math.cos(sat.angle);
                     let sy = Math.sin(timePhase) * 0.15; // Vertical bounce
                     let sz = (radiusZ + noisePert) * Math.sin(sat.angle);
                     
-                    // Apply tilt rotations
-                    let satPos = new THREE.Vector3(sx, sy, sz);
-                    satPos.applyAxisAngle(new THREE.Vector3(1, 0, 0), sat.tiltX);
-                    satPos.applyAxisAngle(new THREE.Vector3(0, 0, 1), sat.tiltZ);
+                    // Apply tilt rotations to base position
+                    let basePos = new THREE.Vector3(sx, sy, sz);
+                    basePos.applyAxisAngle(new THREE.Vector3(1, 0, 0), sat.tiltX);
+                    basePos.applyAxisAngle(new THREE.Vector3(0, 0, 1), sat.tiltZ);
 
-                    // Gravitational orbit perturbation deflection towards cursor
-                    const distToCursor = satPos.distanceTo(cursor3D);
+                    // Spring physics calculation for cursor attraction
+                    let currentPos = new THREE.Vector3().copy(basePos).add(sat.offsetPos);
+                    let force = new THREE.Vector3(0, 0, 0);
+                    
+                    // 1. Gravitational pull towards cursor
+                    const distToCursor = currentPos.distanceTo(cursor3D);
                     if (distToCursor < 6.0) {
                         const pullForce = (6.0 - distToCursor) / 6.0;
-                        const pullFactor = pullForce * 0.35 * (speedBoost * 0.5 + 0.5);
-                        satPos.lerp(cursor3D, pullFactor);
+                        const gravityStrength = 0.08 * (speedBoost * 0.5 + 0.5);
+                        let dirToCursor = new THREE.Vector3().subVectors(cursor3D, currentPos).normalize();
+                        force.add(dirToCursor.multiplyScalar(pullForce * gravityStrength));
                     }
                     
+                    // 2. Restoring spring force towards basePos (offsetPos = 0)
+                    const springK = 0.05;
+                    let restoringForce = new THREE.Vector3().copy(sat.offsetPos).multiplyScalar(-springK);
+                    force.add(restoringForce);
+                    
+                    // 3. Damping force
+                    const dampingC = 0.12;
+                    let dampingForce = new THREE.Vector3().copy(sat.vel).multiplyScalar(-dampingC);
+                    force.add(dampingForce);
+                    
+                    // Update physics state (dt = 1)
+                    sat.vel.add(force);
+                    sat.offsetPos.add(sat.vel);
+                    
+                    // Final position
+                    let satPos = new THREE.Vector3().copy(basePos).add(sat.offsetPos);
                     sat.mesh.position.copy(satPos);
                     sat.mesh.rotation.x += 0.015;
                     sat.mesh.rotation.y += 0.025;
@@ -605,10 +713,45 @@ window.RippleGlobe = {
                 satLinks.material.opacity = 0.16 + Math.sin(time * 3) * 0.06;
             }
 
-            // Animate Aurora Magnetic Field Flowing Particles
-            if (fieldParticles && fieldCurves.length > 0) {
-                const posArr = fieldParticles.geometry.attributes.position.array;
+            // Animate Traveling Energy Pulses along connection lines
+            if (connParticles && connParticlesData.length > 0) {
+                const connPosArr = connParticles.geometry.attributes.position.array;
                 
+                connParticlesData.forEach((p, idx) => {
+                    p.t += p.speed * speedBoost;
+                    if (p.t > 1.0) {
+                        p.t = 0;
+                    }
+                    
+                    const satPos = satellites[p.satIndex].mesh.position;
+                    const surfacePoint = new THREE.Vector3().copy(satPos).normalize().multiplyScalar(4.5);
+                    const point = new THREE.Vector3().lerpVectors(surfacePoint, satPos, p.t);
+                    
+                    connPosArr[idx * 3] = point.x;
+                    connPosArr[idx * 3 + 1] = point.y;
+                    connPosArr[idx * 3 + 2] = point.z;
+                });
+                
+                connParticles.geometry.attributes.position.needsUpdate = true;
+            }
+
+            // Animate Aurora Magnetic Field Curves (Solar Wind Wobble) & Flowing Particles
+            if (fieldCurves.length > 0 && fieldLines.length > 0 && fieldParticles) {
+                fieldCurves.forEach((curve, i) => {
+                    const angle = (i / fieldLineCount) * Math.PI * 2;
+                    const midRadius = radius * (1.25 + Math.sin(time * 1.5 + i * 2) * 0.15);
+                    const wobbleAngle = angle + Math.cos(time * 0.8 + i) * 0.22;
+                    
+                    curve.v1.x = midRadius * Math.cos(wobbleAngle);
+                    curve.v1.y = Math.sin(time * 2.0 + i) * 0.45;
+                    curve.v1.z = midRadius * Math.sin(wobbleAngle);
+                    
+                    const points = curve.getPoints(24);
+                    fieldLines[i].geometry.setFromPoints(points);
+                    fieldLines[i].geometry.attributes.position.needsUpdate = true;
+                });
+
+                const posArr = fieldParticles.geometry.attributes.position.array;
                 fieldParticlesData.forEach((p, idx) => {
                     p.t += p.speed * speedBoost * 0.8;
                     if (p.t > 1.0) {
@@ -625,7 +768,7 @@ window.RippleGlobe = {
                 fieldParticles.geometry.attributes.position.needsUpdate = true;
             }
 
-            // Animate Action Data Ingestion Particles
+            // Animate Action Data Ingestion Particles (Swirling Helical Vortex)
             if (ingestParticles && ingestMat.opacity > 0) {
                 const posArr = ingestGeo.attributes.position.array;
                 let anyActive = false;
@@ -634,24 +777,40 @@ window.RippleGlobe = {
                     if (!p.active) return;
                     anyActive = true;
                     
-                    p.t += 0.02 * speedBoost; // Speed up animation when pulsed
+                    p.t += p.speed * (speedBoost * 0.5 + 0.5);
                     if (p.t >= 1.0) {
                         p.active = false;
+                        // flash satellite mesh scale when pulse hits it
+                        if (satellites[p.targetSat]) {
+                            satellites[p.targetSat].mesh.scale.set(1.8, 1.8, 1.8);
+                        }
                         return;
                     }
                     
                     const satPos = satellites[p.targetSat].mesh.position;
-                    const control = new THREE.Vector3().copy(p.vel).multiplyScalar(8);
+                    const linearPoint = new THREE.Vector3().lerpVectors(p.startPos, satPos, p.t);
                     
-                    const qPoint = new THREE.Vector3();
-                    const mt = 1 - p.t;
-                    qPoint.x = mt * mt * 0 + 2 * mt * p.t * control.x + p.t * p.t * satPos.x;
-                    qPoint.y = mt * mt * 0 + 2 * mt * p.t * control.y + p.t * p.t * satPos.y;
-                    qPoint.z = mt * mt * 0 + 2 * mt * p.t * control.z + p.t * p.t * satPos.z;
+                    // Create helical spiral vortex around the path
+                    const pathDir = new THREE.Vector3().subVectors(satPos, p.startPos).normalize();
+                    let tempDir = new THREE.Vector3(0, 1, 0);
+                    if (Math.abs(pathDir.dot(tempDir)) > 0.9) {
+                        tempDir.set(1, 0, 0);
+                    }
+                    const perpDir1 = new THREE.Vector3().crossVectors(pathDir, tempDir).normalize();
+                    const perpDir2 = new THREE.Vector3().crossVectors(pathDir, perpDir1).normalize();
                     
-                    posArr[idx * 3] = qPoint.x;
-                    posArr[idx * 3 + 1] = qPoint.y;
-                    posArr[idx * 3 + 2] = qPoint.z;
+                    const angle = p.t * Math.PI * 2 * p.spiralSpeed;
+                    const radiusScale = Math.sin(p.t * Math.PI) * p.spiralRadius;
+                    
+                    const offset = new THREE.Vector3()
+                        .addScaledVector(perpDir1, Math.cos(angle) * radiusScale)
+                        .addScaledVector(perpDir2, Math.sin(angle) * radiusScale);
+                        
+                    const finalPoint = new THREE.Vector3().copy(linearPoint).add(offset);
+                    
+                    posArr[idx * 3] = finalPoint.x;
+                    posArr[idx * 3 + 1] = finalPoint.y;
+                    posArr[idx * 3 + 2] = finalPoint.z;
                 });
                 
                 ingestGeo.attributes.position.needsUpdate = true;
