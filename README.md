@@ -1,6 +1,6 @@
 # RippleUp - Youth Sustainability Reward Journey 🍃
 
-RippleUp is a gamified behavior-change platform designed to empower urban youth to build climate-friendly habits through physical-plus-digital interventions. This project was conceptualized by **Team #12** (Rudra, Saara, Suchita, Afsara) to address the UNICEF-IUCN research findings that youth in Least Developed Countries have strong motivations to act but lack structured opportunities and micro-incentives.
+RippleUp is a gamified behavior-change platform designed to empower urban youth to build climate-friendly habits through physical-plus-digital interventions. This project was conceptualized by **Team #12** (led by Saara Vishnoi, with members Rudra Sarker, Suchita, Priyamvada, Afsara, Nigel, Kate, Samia, Jabir, and Anastasia) to address the UNICEF-IUCN research findings that youth in Least Developed Countries have strong motivations to act but lack structured opportunities and micro-incentives.
 
 👉 **Live Site:** [https://rudra496.github.io/ytf/](https://rudra496.github.io/ytf/)
 
@@ -87,7 +87,13 @@ To deploy this project to GitHub Pages under the repository name `ytf`:
 ---
 
 ### 👥 Team #12 Core Members
+- **Saara Vishnoi** (Leader)
 - **Rudra Sarker** (SUST IPE Department, Lead Developer & Designer)
-- **Saara Hossain**
-- **Suchita Sen**
-- **Afsara Kabir**
+- **Suchita**
+- **Priyamvada**
+- **Afsara**
+- **Nigel**
+- **Kate**
+- **Samia**
+- **Jabir**
+- **Anastasia**
