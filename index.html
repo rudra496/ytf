@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RippleUp - Youth Sustainability Reward Journey</title>
+    <meta name="description" content="Turn everyday sustainable actions into rewards. A behavior-change platform empowering youth to build climate-friendly habits.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <!-- 3D Canvas Background -->
+    <div id="canvas-container"></div>
+
+    <!-- Navigation Header -->
+    <header id="main-header">
+        <div class="header-container">
+            <a href="#" class="logo-link" id="logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-leaf text-glow"></i>
+                </div>
+                <span class="logo-text">Ripple<span class="highlight">Up</span></span>
+            </a>
+            <nav id="nav-menu">
+                <ul>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#storyboard" class="nav-link">User Journey</a></li>
+                    <li><a href="#simulator" class="nav-link active">App Simulator</a></li>
+                    <li><a href="#leaderboard" class="nav-link">Leaderboard</a></li>
+                    <li><a href="#research" class="nav-link">Climate Insights</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="#simulator" class="cta-button btn-glass">Try Demo</a>
+                <button id="mobile-menu-toggle" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer Navigation -->
+    <div id="mobile-drawer" class="drawer">
+        <div class="drawer-header">
+            <span class="logo-text">Ripple<span class="highlight">Up</span></span>
+            <button id="drawer-close" aria-label="Close Menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <ul class="drawer-links">
+            <li><a href="#about" class="drawer-link">About</a></li>
+            <li><a href="#storyboard" class="drawer-link">User Journey</a></li>
+            <li><a href="#simulator" class="drawer-link">App Simulator</a></li>
+            <li><a href="#leaderboard" class="drawer-link">Leaderboard</a></li>
+            <li><a href="#research" class="drawer-link">Climate Insights</a></li>
+        </ul>
+        <div class="drawer-footer">
+            <a href="#simulator" class="cta-button btn-solid">Launch Simulator</a>
+        </div>
+    </div>
+    <div id="drawer-overlay" class="overlay"></div>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-container">
+                <div class="hero-text-content">
+                    <div class="badge-pill">
+                        <span class="pill-dot"></span>
+                        <span class="pill-text">Team #12 MVP Release</span>
+                    </div>
+                    <h1 class="hero-title">Turn Everyday <br><span class="gradient-text">Sustainable Actions</span> <br>Into Rewards</h1>
+                    <p class="hero-subtitle">
+                        RippleUp is a behavior-change platform designed for youth to build eco-friendly habits through gamification, points, streaks, and community challenges.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#simulator" class="cta-button btn-primary glow-effect">
+                            <i class="fa-solid fa-play"></i> Open App Simulator
+                        </a>
+                        <a href="#storyboard" class="cta-button btn-secondary">
+                            Explore Journey <i class="fa-solid fa-arrow-down"></i>
+                        </a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">20+</span>
+                            <span class="stat-label">Eco Actions</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-number">0.2kg</span>
+                            <span class="stat-label">CO₂ Offset / Refill</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">Youth Driven</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <!-- Interactive 3D Orbit Display Container -->
+                    <div class="three-display-card glass-panel">
+                        <div id="three-orbit-canvas"></div>
+                        <div class="three-label">
+                            <i class="fa-solid fa-circle-nodes pulse"></i> Interactive Eco-Globe
+                        </div>
+                        <div class="three-instructions">Hover & Drag to Rotate the Sustainability Grid</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section / Concept Core -->
+        <section id="about" class="about-section scroll-reveal">
+            <div class="section-container">
+                <div class="section-header text-center">
+                    <h2 class="section-title">The Power of Small Actions</h2>
+                    <p class="section-subtitle">Every decision you make ripples through your community. Here is how RippleUp turns small efforts into habits.</p>
+                </div>
+                <div class="about-grid">
+                    <div class="about-card glass-panel hover-glow">
+                        <div class="card-icon-wrapper">
+                            <i class="fa-solid fa-qrcode"></i>
+                        </div>
+                        <h3 class="card-title">1. Scan & Verify</h3>
+                        <p class="card-text">Scan vivid QR codes at water refill stations, recycling hubs, local green vendors, and public transport zones to log your sustainable actions instantly.</p>
+                    </div>
+                    <div class="about-card glass-panel hover-glow">
+                        <div class="card-icon-wrapper">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <h3 class="card-title">2. Track Impact</h3>
+                        <p class="card-text">Visualize your personal contributions in real-time, including exact plastic bottles avoided, food waste prevented, and carbon footprint (CO₂) reductions.</p>
+                    </div>
+                    <div class="about-card glass-panel hover-glow">
+                        <div class="card-icon-wrapper">
+                            <i class="fa-solid fa-gift"></i>
+                        </div>
+                        <h3 class="card-title">3. Unlock Rewards</h3>
+                        <p class="card-text">Redeem points for discounts at local sustainable vendors, coupons for eco-friendly products, badges, and recognition certificates.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Storyboard Section -->
+        <section id="storyboard" class="storyboard-section scroll-reveal">
+            <div class="section-container">
+                <div class="section-header">
+                    <h2 class="section-title">The RippleUp Journey</h2>
+                    <p class="section-subtitle">Follow a typical youth participant's experience from a simple action to long-term habit formation.</p>
+                </div>
+                
+                <div class="storyboard-container glass-panel">
+                    <div class="story-slider">
+                        <!-- Slide 1 -->
+                        <div class="story-slide active" data-slide="0">
+                            <div class="story-image-placeholder">
+                                <div class="eco-illustration">
+                                    <div class="city-skyline"></div>
+                                    <i class="fa-solid fa-trash-can main-icon animate-bounce"></i>
+                                    <div class="cloud-bubble">"I know these habits aren't great for the environment, but I never know where to start."</div>
+                                </div>
+                            </div>
+                            <div class="story-content">
+                                <span class="slide-num">Step 01 / 10</span>
+                                <h3 class="slide-heading">The Awareness Gap</h3>
+                                <p class="slide-desc">Many young people are aware of climate challenges and urban waste issues but feel overwhelmed and unsure how their individual actions can make a real difference.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 2 -->
+                        <div class="story-slide" data-slide="1">
+                            <div class="story-image-placeholder">
+                                <div class="eco-illustration">
+                                    <div class="poster-board">
+                                        <div class="poster-content">
+                                            <i class="fa-solid fa-leaf poster-logo"></i>
+                                            <h4>RippleUp</h4>
+                                            <p>Turn everyday actions into rewards</p>
+                                        </div>
+                                    </div>
+                                    <div class="cloud-bubble">"Maybe I can start with one small habit."</div>
+                                </div>
+                            </div>
+                            <div class="story-content">
+                                <span class="slide-num">Step 02 / 10</span>
+                                <h3 class="slide-heading">Discovering RippleUp</h3>
+                                <p class="slide-desc">Youth encounter RippleUp posters and digital campaigns across campuses, suggesting a rewarding way to build sustainability into daily life.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3 -->
+                        <div class="story-slide" data-slide="2">
+                            <div class="story-image-placeholder">
+                                <div class="eco-illustration">
+                                    <div class="refill-station-mock">
+                                        <div class="nozzle"></div>
+                                        <div class="cup-fill"></div>
+                                    </div>
+                                    <i class="fa-solid fa-droplet main-icon drop-animation"></i>
+                                    <div class="cloud-bubble">"Every small action counts."</div>
+                                </div>
+                            </div>
+                            <div class="story-content">
+                                <span class="slide-num">Step 03 / 10</span>
+                                <h3 class="slide-heading">First Sustainable Action</h3>
+                                <p class="slide-desc">Instead of buying a single-use plastic bottle, a student decides to refill their reusable bottle at a designated campus water station.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 4 -->
+                        <div class="story-slide" data-slide="3">
+                            <div class="story-image-placeholder">
+                                <div class="eco-illustration">
+                                    <div class="phone-frame-mock">
+                                        <div class="phone-screen-content success-check">
+                                            <i class="fa-solid fa-circle-check check-glow"></i>
+                                            <div class="points-badge">+20 Points</div>
+                                            <div class="streak-txt">Streak Started!</div>
+                                        </div>
+                                    </div>
+                                    <div class="cloud-bubble">"Nice! My action actually counts."</div>
+                                </div>
+                            </div>
+                            <div class="story-content">
+                                <span class="slide-num">Step 04 / 10</span>
+                                <h3 class="slide-heading">Action Verification</h3>
+                                <p class="slide-desc">Scanning the QR code at the water station registers the action instantly. The user sees immediate feedback: +20 points and a started streak!</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 5 -->
+                        <div class="story-slide" data-slide="4">
+                            <div class="story-image-placeholder">
+                                <div class="eco-illustration">
+                                    <div class="streak-cal-mock">
+                                        <div class="fire-icon-large"><i class="fa-solid fa-fire fire-glow"></i></div>
+                                        <div class="streak-num">5 Day Streak</div>
+                                    </div>
+                                    <div class="cloud-bubble">"Small actions are becoming daily habits."</div>
+                                </div>
+                            </div>
+                            <div class="story-content">
+                                <span class="slide-num">Step 05 / 10</span>
+                                <h3 class="slide-heading">Streak & Habit Building</h3>
+                                <p class="slide-desc">Through gamified elements like a 5-day streak and healthy habit tracking, the daily green action is reinforced, making it natural and motivating.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 6 -->
+                        <div class="story-slide" data-slide="5">
+                            <div class="story-image-placeholder">
+                                <div class="eco-illustration">
+                                    <i class="fa-solid fa-apple-whole main-icon scale-up"></i>
+                                    <div class="vendor-cart">Local Produce</div>
+                                    <div class="cloud-bubble">"Healthy choices support both me and my local community."</div>
+                                </div>
+                            </div>
+                            <div class="story-content">
+                                <span class="slide-num">Step 06 / 10</span>
+                                <h3 class="slide-heading">Supporting Local Businesses</h3>
+                                <p class="slide-desc">Users earn points and discount vouchers, which they redeem at participating local green vendors, driving sustainable local circular economy.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 7 -->
+                        <div class="story-slide" data-slide="6">
+                            <div class="story-image-placeholder">
+                                <div class="eco-illustration">
+                                    <div class="bin-recycling">
+                                        <div class="recycling-symbol">♻️</div>
+                                    </div>
+                                    <i class="fa-solid fa-box-archive main-icon"></i>
+                                    <div class="cloud-bubble">"Turning waste into rewards, one bottle at a time."</div>
+                                </div>
+                            </div>
+                            <div class="story-content">
+                                <span class="slide-num">Step 07 / 10</span>
+                                <h3 class="slide-heading">Expanding Eco Actions</h3>
+                                <p class="slide-desc">Having built water-refill habits, users begin exploring other actions: returning plastics to recycling bins or participating in group trash collection.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 8 -->
+                        <div class="story-slide" data-slide="7">
+                            <div class="story-image-placeholder">
+                                <div class="eco-illustration">
+                                    <div class="reusable-bag">
+                                        <i class="fa-solid fa-bag-shopping bag-icon"></i>
+                                        <div class="bag-label">Eco-Bag</div>
+                                    </div>
+                                    <div class="cloud-bubble">"Replacing single-use plastics starts with one reusable habit."</div>
+                                </div>
+                            </div>
+                            <div class="story-content">
+                                <span class="slide-num">Step 08 / 10</span>
+                                <h3 class="slide-heading">Systemic Habit Shifts</h3>
+                                <p class="slide-desc">The youth participant makes a habit of carrying cloth bags, refusing disposable packaging, and preferring green mobility options like cycling or walking.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 9 -->
+                        <div class="story-slide" data-slide="8">
+                            <div class="story-image-placeholder">
+                                <div class="eco-illustration">
+                                    <div class="dashboard-stats-mock">
+                                        <div class="stat-row">💧 15 Bottles Avoided</div>
+                                        <div class="stat-row">🍎 13 Food Waste Actions</div>
+                                        <div class="stat-row">🌱 700g CO₂ Saved</div>
+                                    </div>
+                                    <div class="cloud-bubble">"My actions matter—and I'm part of something bigger."</div>
+                                </div>
+                            </div>
+                            <div class="story-content">
+                                <span class="slide-num">Step 09 / 10</span>
+                                <h3 class="slide-heading">Seeing Collective Impact</h3>
+                                <p class="slide-desc">The dashboard displays quantified environmental impact. Reviewing metrics of saved CO2 and reduced landfill waste creates a strong feeling of efficacy.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 10 -->
+                        <div class="story-slide" data-slide="9">
+                            <div class="story-image-placeholder">
+                                <div class="eco-illustration">
+                                    <div class="happy-campus">
+                                        <i class="fa-solid fa-bicycle bike-ride"></i>
+                                        <i class="fa-solid fa-tree tree-growing"></i>
+                                    </div>
+                                    <div class="cloud-bubble">"Months later, sustainable habits have become second nature."</div>
+                                </div>
+                            </div>
+                            <div class="story-content">
+                                <span class="slide-num">Step 10 / 10</span>
+                                <h3 class="slide-heading">Second Nature</h3>
+                                <p class="slide-desc">Sustainable living becomes a standard, effortless part of everyday life. Habit-formation is complete, and the youth inspires their peers to join the journey.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Storyboard Controls -->
+                    <div class="story-controls">
+                        <button id="prev-slide" class="control-btn" aria-label="Previous Slide">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <div class="story-dots">
+                            <!-- JS will populate dots or we can have them static -->
+                            <span class="dot active" data-slide="0"></span>
+                            <span class="dot" data-slide="1"></span>
+                            <span class="dot" data-slide="2"></span>
+                            <span class="dot" data-slide="3"></span>
+                            <span class="dot" data-slide="4"></span>
+                            <span class="dot" data-slide="5"></span>
+                            <span class="dot" data-slide="6"></span>
+                            <span class="dot" data-slide="7"></span>
+                            <span class="dot" data-slide="8"></span>
+                            <span class="dot" data-slide="9"></span>
+                        </div>
+                        <button id="next-slide" class="control-btn" aria-label="Next Slide">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- App Simulator / Dashboard Simulator Section -->
+        <section id="simulator" class="simulator-section scroll-reveal">
+            <div class="section-container">
+                <div class="section-header text-center">
+                    <h2 class="section-title">Interactive App Simulator</h2>
+                    <p class="section-subtitle">Experience the RippleUp mobile platform. Log sustainable actions, scan QR codes, earn points, and unlock badges.</p>
+                </div>
+
+                <div class="simulator-layout">
+                    <!-- Simulator Interface Controls -->
+                    <div class="simulator-controls glass-panel">
+                        <h3>Perform Action</h3>
+                        <p class="control-help">Click an action below to simulate a real-world event and watch the phone update in real time.</p>
+                        
+                        <div class="action-buttons-grid">
+                            <button class="action-btn" data-action="refill">
+                                <div class="action-btn-icon"><i class="fa-solid fa-droplet text-blue"></i></div>
+                                <div class="action-btn-text">
+                                    <span class="action-name">Refill Water Bottle</span>
+                                    <span class="action-points">+20 Points &bull; -0.2 kg CO₂</span>
+                                </div>
+                            </button>
+                            <button class="action-btn" data-action="food">
+                                <div class="action-btn-icon"><i class="fa-solid fa-apple-whole text-red"></i></div>
+                                <div class="action-btn-text">
+                                    <span class="action-name">Avoid Food Waste</span>
+                                    <span class="action-points">+15 Points &bull; -0.3 kg CO₂</span>
+                                </div>
+                            </button>
+                            <button class="action-btn" data-action="recycle">
+                                <div class="action-btn-icon"><i class="fa-solid fa-recycle text-green"></i></div>
+                                <div class="action-btn-text">
+                                    <span class="action-name">Recycle Plastic Bottle</span>
+                                    <span class="action-points">+30 Points &bull; -0.15 kg CO₂</span>
+                                </div>
+                            </button>
+                            <button class="action-btn" data-action="transit">
+                                <div class="action-btn-icon"><i class="fa-solid fa-bicycle text-purple"></i></div>
+                                <div class="action-btn-text">
+                                    <span class="action-name">Walk or Cycle Commute</span>
+                                    <span class="action-points">+25 Points &bull; -0.5 kg CO₂</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div class="action-qr-trigger">
+                            <p class="control-help">Or simulate scanning a physical RippleUp QR sticker at a refill station or partner vendor shop.</p>
+                            <button id="trigger-qr-scan" class="cta-button btn-solid glow-effect">
+                                <i class="fa-solid fa-qrcode"></i> Scan Simulated QR Code
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Visual Mobile Device Mockup -->
+                    <div class="phone-mockup">
+                        <div class="phone-speaker"></div>
+                        <div class="phone-screen">
+                            <!-- Phone Status Bar -->
+                            <div class="phone-status-bar">
+                                <span class="phone-time">20:30</span>
+                                <div class="phone-status-icons">
+                                    <i class="fa-solid fa-wifi"></i>
+                                    <i class="fa-solid fa-battery-three-quarters"></i>
+                                </div>
+                            </div>
+
+                            <!-- Phone App Header -->
+                            <div class="phone-app-header">
+                                <div class="user-avatar">
+                                    <img src="rudra_profile.jpeg" alt="Rudra Profile" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80'">
+                                </div>
+                                <div class="user-greeting">
+                                    <span class="hello-text">Welcome back,</span>
+                                    <span class="user-name">Rudra Sir</span>
+                                </div>
+                                <div class="app-notifications">
+                                    <i class="fa-regular fa-bell"></i>
+                                    <span class="noti-badge"></span>
+                                </div>
+                            </div>
+
+                            <!-- Phone App Main Content (Dashboard View) -->
+                            <div class="phone-app-content active" id="view-dashboard">
+                                <!-- Main Points Card -->
+                                <div class="phone-points-card">
+                                    <span class="points-label">Total Points Balance</span>
+                                    <span class="points-val" id="points-counter">350</span>
+                                    <div class="co2-pill">
+                                        <i class="fa-solid fa-seedling"></i> <span id="co2-counter">7.0</span> kg CO₂ Saved
+                                    </div>
+                                </div>
+
+                                <!-- Mini Streak & Level Grid -->
+                                <div class="phone-mini-grid">
+                                    <div class="mini-card">
+                                        <i class="fa-solid fa-fire text-orange animate-pulse"></i>
+                                        <div class="mini-card-text">
+                                            <span class="card-num" id="streak-counter">5</span>
+                                            <span class="card-lbl">Day Streak</span>
+                                        </div>
+                                    </div>
+                                    <div class="mini-card">
+                                        <i class="fa-solid fa-circle-nodes text-green"></i>
+                                        <div class="mini-card-text">
+                                            <span class="card-num" id="level-counter">12</span>
+                                            <span class="card-lbl">Eco Actions</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Unlocked Badges Section -->
+                                <div class="phone-section-title">
+                                    <span>Unlocked Badges</span>
+                                    <a href="#">See All</a>
+                                </div>
+                                <div class="phone-badges-row">
+                                    <div class="phone-badge-item unlocked" id="badge-bronze">
+                                        <div class="badge-icon bronze"><i class="fa-solid fa-award"></i></div>
+                                        <span class="badge-lbl">Bronze</span>
+                                    </div>
+                                    <div class="phone-badge-item locked" id="badge-silver">
+                                        <div class="badge-icon silver"><i class="fa-solid fa-lock"></i></div>
+                                        <span class="badge-lbl">Silver</span>
+                                    </div>
+                                    <div class="phone-badge-item locked" id="badge-gold">
+                                        <div class="badge-icon gold"><i class="fa-solid fa-lock"></i></div>
+                                        <span class="badge-lbl">Gold</span>
+                                    </div>
+                                </div>
+
+                                <!-- Recent Activity List -->
+                                <div class="phone-section-title">
+                                    <span>Recent Verified Actions</span>
+                                </div>
+                                <div class="phone-activity-list" id="activity-log">
+                                    <div class="activity-row">
+                                        <div class="act-icon bg-blue"><i class="fa-solid fa-droplet"></i></div>
+                                        <div class="act-details">
+                                            <span class="act-title">Water Refill Station #3</span>
+                                            <span class="act-time">Today, 2:21 PM</span>
+                                        </div>
+                                        <span class="act-points">+20 pts</span>
+                                    </div>
+                                    <div class="activity-row">
+                                        <div class="act-icon bg-red"><i class="fa-solid fa-apple-whole"></i></div>
+                                        <div class="act-details">
+                                            <span class="act-title">Avoided Food Waste</span>
+                                            <span class="act-time">Yesterday, 4:10 PM</span>
+                                        </div>
+                                        <span class="act-points">+15 pts</span>
+                                    </div>
+                                    <div class="activity-row">
+                                        <div class="act-icon bg-green"><i class="fa-solid fa-recycle"></i></div>
+                                        <div class="act-details">
+                                            <span class="act-title">Recycling Hub B</span>
+                                            <span class="act-time">June 22, 10:54 PM</span>
+                                        </div>
+                                        <span class="act-points">+30 pts</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phone App QR Scanner Overlay (Hidden by Default) -->
+                            <div class="phone-app-overlay" id="view-scanner">
+                                <div class="scanner-view-container">
+                                    <div class="scanner-header">
+                                        <button id="close-scanner"><i class="fa-solid fa-xmark"></i></button>
+                                        <span>Scan QR Code</span>
+                                    </div>
+                                    
+                                    <!-- QR Selection / Camera Simulator -->
+                                    <div class="scanner-target-area">
+                                        <div class="scan-frame">
+                                            <span class="corner top-left"></span>
+                                            <span class="corner top-right"></span>
+                                            <span class="corner bottom-left"></span>
+                                            <span class="corner bottom-right"></span>
+                                            <div class="scan-laser"></div>
+                                        </div>
+                                        <p class="scan-help-text">Align QR sticker inside the frame</p>
+                                    </div>
+
+                                    <!-- QR Options List -->
+                                    <div class="scanner-presets">
+                                        <span class="presets-title">Choose Simulated Station to Scan:</span>
+                                        <div class="preset-buttons">
+                                            <button class="preset-btn" data-preset="campus-refill">
+                                                <i class="fa-solid fa-droplet"></i> Campus Water Refill #4
+                                            </button>
+                                            <button class="preset-btn" data-preset="green-grocer">
+                                                <i class="fa-solid fa-apple-whole"></i> Organic Grocer Stall #7
+                                            </button>
+                                            <button class="preset-btn" data-preset="recycle-bin">
+                                                <i class="fa-solid fa-recycle"></i> Smart Recycling Point #12
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phone Success Overlay (Hidden by Default) -->
+                            <div class="phone-app-overlay success-overlay" id="view-success">
+                                <div class="success-content">
+                                    <div class="success-icon-ring">
+                                        <i class="fa-solid fa-check scale-up"></i>
+                                    </div>
+                                    <h3 class="success-heading">Action Verified!</h3>
+                                    <p class="success-text" id="success-message">You have earned points & reduced carbon footprint.</p>
+                                    <div class="earned-pill" id="success-points">+20 Ripple Points</div>
+                                    <button class="cta-button btn-solid" id="success-dismiss">Awesome</button>
+                                </div>
+                            </div>
+
+                            <!-- Phone Nav Bar -->
+                            <div class="phone-nav-bar">
+                                <button class="phone-nav-btn active" id="btn-phone-home">
+                                    <i class="fa-solid fa-house"></i>
+                                    <span>Home</span>
+                                </button>
+                                <button class="phone-nav-btn" id="btn-phone-scan">
+                                    <i class="fa-solid fa-qrcode"></i>
+                                    <span>Scan</span>
+                                </button>
+                                <button class="phone-nav-btn" id="btn-phone-leader">
+                                    <i class="fa-solid fa-trophy"></i>
+                                    <span>Rankings</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="phone-home-button"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Leaderboard Section -->
+        <section id="leaderboard" class="leaderboard-section scroll-reveal">
+            <div class="section-container">
+                <div class="section-header text-center">
+                    <h2 class="section-title">Community Standings</h2>
+                    <p class="section-subtitle">See which youth groups and teams are leading in verified sustainable actions and carbon reduction.</p>
+                </div>
+
+                <div class="leaderboard-tabs">
+                    <button class="tab-btn active" data-tab="teams">Teams</button>
+                    <button class="tab-btn" data-tab="individuals">Individuals</button>
+                </div>
+
+                <div class="leaderboard-card glass-panel">
+                    <div class="leaderboard-table-header">
+                        <span class="col-rank">Rank</span>
+                        <span class="col-name">Team Name</span>
+                        <span class="col-actions">Actions</span>
+                        <span class="col-impact">CO₂ Offset</span>
+                        <span class="col-points">Points</span>
+                    </div>
+
+                    <div class="leaderboard-rows" id="leaderboard-teams-view">
+                        <!-- Row 1 (Highlight User's Team) -->
+                        <div class="leader-row highlight-team">
+                            <span class="col-rank"><i class="fa-solid fa-crown text-yellow"></i> 1</span>
+                            <span class="col-name">Team #12 (RippleUp Founders) <span class="tag">My Team</span></span>
+                            <span class="col-actions">142</span>
+                            <span class="col-impact">32.4 kg</span>
+                            <span class="col-points">2,840 pts</span>
+                        </div>
+                        <!-- Row 2 -->
+                        <div class="leader-row">
+                            <span class="col-rank">2</span>
+                            <span class="col-name">Green Campus Alliance</span>
+                            <span class="col-actions">118</span>
+                            <span class="col-impact">24.8 kg</span>
+                            <span class="col-points">2,360 pts</span>
+                        </div>
+                        <!-- Row 3 -->
+                        <div class="leader-row">
+                            <span class="col-rank">3</span>
+                            <span class="col-name">SustainSUST Cycling Club</span>
+                            <span class="col-actions">95</span>
+                            <span class="col-impact">20.5 kg</span>
+                            <span class="col-points">1,900 pts</span>
+                        </div>
+                        <!-- Row 4 -->
+                        <div class="leader-row">
+                            <span class="col-rank">4</span>
+                            <span class="col-name">Eco Warriors Hub</span>
+                            <span class="col-actions">82</span>
+                            <span class="col-impact">16.2 kg</span>
+                            <span class="col-points">1,640 pts</span>
+                        </div>
+                        <!-- Row 5 -->
+                        <div class="leader-row">
+                            <span class="col-rank">5</span>
+                            <span class="col-name">Urban Re-Wilders</span>
+                            <span class="col-actions">64</span>
+                            <span class="col-impact">12.0 kg</span>
+                            <span class="col-points">1,280 pts</span>
+                        </div>
+                    </div>
+
+                    <!-- Individuals View (Hidden by Default) -->
+                    <div class="leaderboard-rows display-none" id="leaderboard-individuals-view">
+                        <div class="leader-row">
+                            <span class="col-rank"><i class="fa-solid fa-crown text-yellow"></i> 1</span>
+                            <span class="col-name">Rudra Sarker (SUST)</span>
+                            <span class="col-actions">48</span>
+                            <span class="col-impact">10.8 kg</span>
+                            <span class="col-points">960 pts</span>
+                        </div>
+                        <div class="leader-row">
+                            <span class="col-rank">2</span>
+                            <span class="col-name">Saara Hossain (SUST)</span>
+                            <span class="col-actions">42</span>
+                            <span class="col-impact">8.9 kg</span>
+                            <span class="col-points">840 pts</span>
+                        </div>
+                        <div class="leader-row">
+                            <span class="col-rank">3</span>
+                            <span class="col-name">Tanvir Ahmed</span>
+                            <span class="col-actions">36</span>
+                            <span class="col-impact">7.6 kg</span>
+                            <span class="col-points">720 pts</span>
+                        </div>
+                        <div class="leader-row">
+                            <span class="col-rank">4</span>
+                            <span class="col-name">Afsara Kabir</span>
+                            <span class="col-actions">32</span>
+                            <span class="col-impact">6.8 kg</span>
+                            <span class="col-points">640 pts</span>
+                        </div>
+                        <div class="leader-row">
+                            <span class="col-rank">5</span>
+                            <span class="col-name">Suchita Sen</span>
+                            <span class="col-actions">28</span>
+                            <span class="col-impact">5.7 kg</span>
+                            <span class="col-points">560 pts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Climate Insights & Research Section -->
+        <section id="research" class="research-section scroll-reveal">
+            <div class="section-container">
+                <div class="section-header text-center">
+                    <h2 class="section-title">Climate Insights & Research</h2>
+                    <p class="section-subtitle">Understanding the foundation, findings, and stakeholder interviews behind RippleUp.</p>
+                </div>
+
+                <div class="research-grid">
+                    <!-- Research Column 1 -->
+                    <div class="research-text glass-panel">
+                        <h3><i class="fa-solid fa-book-open"></i> The UNICEF-IUCN Context</h3>
+                        <p>
+                            According to joint research by <strong>UNICEF</strong> and the <strong>IUCN</strong>, youth in Least Developed Countries have a strong, innate motivation to participate in climate resilience actions. However, they face a critical barrier: **the lack of structured opportunities, incentives, and accessible local channels to act.**
+                        </p>
+                        <p>
+                            Traditional environmental platforms rely heavily on raising passive awareness, which fails to drive actual, sustained habit formation. RippleUp bridges this gap by introducing <strong>physical-plus-digital interventions</strong> (QR stickers placed directly at water-refill stations and local produce markets) and micro-incentives to turn intention into daily routine.
+                        </p>
+                        
+                        <blockquote class="research-quote">
+                            "The low adoption and retention of climate-conscious behaviors among urban youth in Least Developed Countries is driven by a combination of inadequate green infrastructure, unsupportive urban planning, and ineffective digital behavior-change solutions."
+                            <span class="quote-author">&mdash; Team #12 Problem Definition</span>
+                        </blockquote>
+                    </div>
+
+                    <!-- Research Column 2 -->
+                    <div class="research-interviews glass-panel">
+                        <h3><i class="fa-solid fa-comments"></i> Stakeholder Insights</h3>
+                        <div class="interview-item">
+                            <div class="interviewer-header">
+                                <span class="interviewee-name">Ridwan Syed Saad, 25</span>
+                                <span class="interviewee-role">Student, Savar</span>
+                            </div>
+                            <p class="interview-text">
+                                "I think all three problems are important, but vehicle pollution and outdoor heat are the most critical because they directly affect daily life and choices. For me and many others, extreme heat makes it very difficult to choose walking, cycling, or public transport. I'd scan a colorful QR code at a water station if it looked fun, quick, and clearly showed I'd get points or impact tracking."
+                            </p>
+                        </div>
+                        <div class="interview-item">
+                            <div class="interviewer-header">
+                                <span class="interviewee-name">Tanvir Ahmed, 20</span>
+                                <span class="interviewee-role">Daily Cyclist</span>
+                            </div>
+                            <p class="interview-text">
+                                "Climate action ideas should explore how sustainable living can emerge naturally from the everyday lives of youth, without assuming fixed solutions. If I could see my progress building toward something—like points bar filling up—that would make me come back and scan it again next week. Discounts are very encouraging."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="main-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <span class="logo-text">Ripple<span class="highlight">Up</span></span>
+                <p>Empowering urban youth to make climate-positive choices, one small action at a time.</p>
+                <div class="social-links">
+                    <a href="https://github.com/rudra496" target="_blank"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/rudrasarker" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="https://x.com/Rudra496" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#about">About Core</a></li>
+                    <li><a href="#storyboard">Journey Map</a></li>
+                    <li><a href="#simulator">App Simulator</a></li>
+                    <li><a href="#leaderboard">Leaderboard</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Contact Developer</h4>
+                <ul>
+                    <li>Email: <a href="mailto:rudrasarker130@gmail.com">rudrasarker130@gmail.com</a></li>
+                    <li>Location: Sylhet, Bangladesh</li>
+                    <li>Academic: SUST IPE Department</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 RippleUp &bull; Designed and developed by Rudra Sarker (Rudra Junior / Antigravity). All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Custom JS Scripts -->
+    <script src="three_anim.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
