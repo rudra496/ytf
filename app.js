@@ -49,8 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.addEventListener('scroll', checkReveal);
-    // Initial check
-    checkReveal();
+    checkReveal(); // Initial check
 
     // ======================================================================
     // Interactive Storyboard Slide Controller
@@ -63,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalSlides = slides.length;
 
     function showSlide(index) {
-        // Wrap index around boundaries
         if (index >= totalSlides) index = 0;
         if (index < 0) index = totalSlides - 1;
 
@@ -99,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabBtns = document.querySelectorAll('.leaderboard-tabs .tab-btn');
     const teamsView = document.getElementById('leaderboard-teams-view');
     const individualsView = document.getElementById('leaderboard-individuals-view');
+    const calculatorView = document.getElementById('leaderboard-calculator-view');
 
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -109,12 +108,130 @@ document.addEventListener('DOMContentLoaded', () => {
             if (target === 'teams') {
                 teamsView.classList.remove('display-none');
                 individualsView.classList.add('display-none');
-            } else {
+                if (calculatorView) calculatorView.classList.add('display-none');
+            } else if (target === 'individuals') {
                 teamsView.classList.add('display-none');
                 individualsView.classList.remove('display-none');
+                if (calculatorView) calculatorView.classList.add('display-none');
+            } else if (target === 'calculator') {
+                teamsView.classList.add('display-none');
+                individualsView.classList.add('display-none');
+                if (calculatorView) {
+                    calculatorView.classList.remove('display-none');
+                    // Recalculate and trigger gauge transitions
+                    updateCalculator();
+                }
             }
         });
     });
+
+    // ======================================================================
+    // Interactive SDG Impact Calculator
+    // ======================================================================
+    const slideRefill = document.getElementById('slide-refill');
+    const slideRecycle = document.getElementById('slide-recycle');
+    const slideCommute = document.getElementById('slide-commute');
+    const slideFood = document.getElementById('slide-food');
+
+    const valRefill = document.getElementById('val-refill');
+    const valRecycle = document.getElementById('val-recycle');
+    const valCommute = document.getElementById('val-commute');
+    const valFood = document.getElementById('val-food');
+
+    const calcCO2 = document.getElementById('calc-co2');
+    const calcPlastic = document.getElementById('calc-plastic');
+    const calcWaste = document.getElementById('calc-waste');
+    const calcPoints = document.getElementById('calc-points');
+    const calcAnnualCO2 = document.getElementById('calc-annual-co2');
+    const calcAnnualPlastic = document.getElementById('calc-annual-plastic');
+    const calcGaugeFill = document.getElementById('calc-gauge-fill');
+    const calcGaugeLevel = document.getElementById('calc-gauge-level');
+
+    // Helper: Number pop pulse trigger
+    function applyNumberPop(element) {
+        if (!element) return;
+        element.classList.remove('number-pop');
+        void element.offsetWidth; // trigger reflow
+        element.classList.add('number-pop');
+    }
+
+    function updateCalculator() {
+        if (!slideRefill) return;
+        const refills = parseInt(slideRefill.value);
+        const recycles = parseInt(slideRecycle.value);
+        const commutes = parseInt(slideCommute.value);
+        const foods = parseInt(slideFood.value);
+
+        // Update labels
+        valRefill.textContent = refills;
+        valRecycle.textContent = recycles;
+        valCommute.textContent = commutes + ' km';
+        valFood.textContent = foods;
+
+        // Calculate impact
+        const co2 = (refills * 0.20) + (recycles * 0.15) + (commutes * 0.50) + (foods * 0.30);
+        const plastic = refills + recycles;
+        const waste = foods * 0.50; // assuming 0.5kg per avoided event
+        const points = (refills * 20) + (recycles * 30) + (commutes * 25) + (foods * 15);
+
+        // Check if values have changed to apply popping effect
+        const oldCO2 = calcCO2.textContent;
+        const oldPlastic = calcPlastic.textContent;
+        const oldWaste = calcWaste.textContent;
+        const oldPoints = calcPoints.textContent;
+
+        // Update display
+        calcCO2.textContent = co2.toFixed(1);
+        calcPlastic.textContent = plastic;
+        calcWaste.textContent = waste.toFixed(1);
+        calcPoints.textContent = points;
+
+        if (oldCO2 !== calcCO2.textContent) applyNumberPop(calcCO2);
+        if (oldPlastic !== calcPlastic.textContent) applyNumberPop(calcPlastic);
+        if (oldWaste !== calcWaste.textContent) applyNumberPop(calcWaste);
+        if (oldPoints !== calcPoints.textContent) applyNumberPop(calcPoints);
+
+        // Annual estimates
+        calcAnnualCO2.textContent = (co2 * 52).toFixed(1) + ' kg';
+        calcAnnualPlastic.textContent = plastic * 52;
+
+        // Update Dashboard SVG Circular Gauge
+        if (calcGaugeFill) {
+            // Circumference of SVG circle (radius=40) = 2 * PI * 40 = 251.2
+            const maxPoints = 1600; // max scale of points
+            const percentage = Math.min(points / maxPoints, 1.0);
+            const offset = 251.2 * (1 - percentage);
+            calcGaugeFill.style.strokeDashoffset = offset;
+
+            // Define status tier based on points
+            let levelTitle = "Eco Scout";
+            let levelColor = "var(--primary)"; // Green
+            
+            if (points >= 1200) {
+                levelTitle = "Eco Legend";
+                levelColor = "var(--purple)"; // Purple
+            } else if (points >= 700) {
+                levelTitle = "Planet Guardian";
+                levelColor = "var(--warning)"; // Gold
+            } else if (points >= 300) {
+                levelTitle = "Carbon Champion";
+                levelColor = "var(--accent)"; // Mint green
+            }
+
+            if (calcGaugeLevel) {
+                calcGaugeLevel.textContent = levelTitle;
+                calcGaugeLevel.style.color = levelColor;
+            }
+            calcGaugeFill.style.stroke = levelColor;
+        }
+    }
+
+    if (slideRefill) {
+        [slideRefill, slideRecycle, slideCommute, slideFood].forEach(slider => {
+            slider.addEventListener('input', updateCalculator);
+        });
+        updateCalculator(); // Initial run
+    }
 
     // ======================================================================
     // Mock App Simulator State & Control
@@ -157,6 +274,112 @@ document.addEventListener('DOMContentLoaded', () => {
     // Preset scan buttons inside Phone Mockup
     const presetBtns = document.querySelectorAll('.preset-btn');
 
+    // Glare Reflex for Phone Mockup Frame
+    const phoneMockup = document.querySelector('.phone-mockup');
+    if (phoneMockup) {
+        phoneMockup.addEventListener('mousemove', (e) => {
+            const rect = phoneMockup.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            phoneMockup.style.setProperty('--glare-x', `${x}px`);
+            phoneMockup.style.setProperty('--glare-y', `${y}px`);
+        });
+    }
+
+    // Canvas Confetti Generator inside phone screen
+    const confettiCanvas = document.getElementById('phone-confetti-canvas');
+    let confettiCtx = null;
+    let confettiParticles = [];
+    let confettiAnimId = null;
+
+    if (confettiCanvas) {
+        confettiCtx = confettiCanvas.getContext('2d');
+        function resizeConfettiCanvas() {
+            const rect = confettiCanvas.parentElement.getBoundingClientRect();
+            confettiCanvas.width = rect.width;
+            confettiCanvas.height = rect.height;
+        }
+        resizeConfettiCanvas();
+        window.addEventListener('resize', resizeConfettiCanvas);
+    }
+
+    function triggerConfetti() {
+        if (!confettiCanvas || !confettiCtx) return;
+        if (confettiAnimId) cancelAnimationFrame(confettiAnimId);
+        
+        confettiParticles = [];
+        const colors = ['#10b981', '#34d399', '#3b82f6', '#f59e0b', '#8b5cf6'];
+        const pCount = 45;
+        
+        const startX = confettiCanvas.width / 2;
+        const startY = confettiCanvas.height * 0.7; // Emit from center
+        
+        for (let i = 0; i < pCount; i++) {
+            const angle = Math.PI * 1.05 + (Math.random() - 0.5) * Math.PI * 0.5; // arc directed upwards
+            const speed = 3.5 + Math.random() * 7;
+            confettiParticles.push({
+                x: startX,
+                y: startY,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                size: 4 + Math.random() * 5,
+                rotation: Math.random() * Math.PI * 2,
+                rotSpeed: (Math.random() - 0.5) * 0.15,
+                opacity: 1.0,
+                shape: Math.random() > 0.45 ? 'leaf' : 'circle'
+            });
+        }
+
+        function drawFrame() {
+            confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            let alive = false;
+
+            confettiParticles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.24; // gravity
+                p.vx *= 0.97; // friction
+                p.rotation += p.rotSpeed;
+
+                if (p.y < confettiCanvas.height && p.opacity > 0.02) {
+                    alive = true;
+                    confettiCtx.save();
+                    confettiCtx.translate(p.x, p.y);
+                    confettiCtx.rotate(p.rotation);
+                    confettiCtx.globalAlpha = p.opacity;
+                    confettiCtx.fillStyle = p.color;
+
+                    if (p.shape === 'leaf') {
+                        // Eco Leaf shape drawing
+                        confettiCtx.beginPath();
+                        confettiCtx.moveTo(0, -p.size);
+                        confettiCtx.quadraticCurveTo(p.size * 1.4, 0, 0, p.size);
+                        confettiCtx.quadraticCurveTo(-p.size * 1.4, 0, 0, -p.size);
+                        confettiCtx.fill();
+                    } else {
+                        // Circular spark drawing
+                        confettiCtx.beginPath();
+                        confettiCtx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+                        confettiCtx.fill();
+                    }
+                    confettiCtx.restore();
+
+                    if (p.y > confettiCanvas.height * 0.4) {
+                        p.opacity -= 0.016; // start fading past mid-screen
+                    }
+                }
+            });
+
+            if (alive) {
+                confettiAnimId = requestAnimationFrame(drawFrame);
+            } else {
+                confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            }
+        }
+        drawFrame();
+    }
+
     // Helper functions: Count up animation
     function animateCounter(element, start, end, duration = 1000, isFloat = false) {
         if (!element) return;
@@ -165,11 +388,9 @@ document.addEventListener('DOMContentLoaded', () => {
         function update(currentTime) {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            
-            // Easing function (easeOutQuad)
-            const easeProgress = progress * (2 - progress);
-            
+            const easeProgress = progress * (2 - progress); // easeOutQuad
             const currentVal = start + (end - start) * easeProgress;
+            
             element.textContent = isFloat ? currentVal.toFixed(1) : Math.floor(currentVal);
 
             if (progress < 1) {
@@ -178,7 +399,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 element.textContent = isFloat ? end.toFixed(1) : end;
             }
         }
-        
         requestAnimationFrame(update);
     }
 
@@ -190,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
         state.points += points;
         state.co2Saved += co2Value;
         state.ecoActions += 1;
-        state.streak += 1; // Increment streak dynamically for engagement demo
+        state.streak += 1;
 
         // Animate counter values
         animateCounter(pointsCounter, oldState.points, state.points, 1200);
@@ -199,7 +419,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (streakCounter) streakCounter.textContent = state.streak;
         if (levelCounter) levelCounter.textContent = state.ecoActions;
 
-        // Check Badge Unlock Thresholds
         checkBadges();
 
         // Prep Success Message Overlay
@@ -236,27 +455,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (activityLog) {
             activityLog.insertBefore(newRow, activityLog.firstChild);
-            // Limit to 4 entries visually
             if (activityLog.children.length > 4) {
                 activityLog.removeChild(activityLog.lastChild);
             }
+        }
+
+        // Trigger phone mockup haptic vibration shake
+        if (phoneMockup) {
+            phoneMockup.classList.remove('haptic-shake');
+            void phoneMockup.offsetWidth; // force redraw/reflow
+            phoneMockup.classList.add('haptic-shake');
+        }
+
+        // Trigger visual confetti explosion
+        triggerConfetti();
+
+        // Trigger 3D Globe & Background Particles Pulse
+        if (window.RippleGlobe && typeof window.RippleGlobe.triggerPulse === 'function') {
+            let colorHex = 0x10b981; // default emerald
+            if (colorClass === 'bg-blue') colorHex = 0x3b82f6;      // blue
+            else if (colorClass === 'bg-red') colorHex = 0xef4444;   // red
+            else if (colorClass === 'bg-purple') colorHex = 0x8b5cf6;// purple
+            window.RippleGlobe.triggerPulse(colorHex);
         }
     }
 
     // Check Badges thresholds
     function checkBadges() {
-        // Silver Badge: unlocks at 14 actions (12 initial + 2 new actions)
         if (state.ecoActions >= 14 && badgeSilver) {
             if (badgeSilver.classList.contains('locked')) {
                 badgeSilver.classList.remove('locked');
                 badgeSilver.classList.add('unlocked');
                 badgeSilver.querySelector('i').className = 'fa-solid fa-medal';
-                // Trigger animation alert or effect
                 triggerBadgeMilestone('Silver Badge');
             }
         }
         
-        // Gold Badge: unlocks at 16 actions
         if (state.ecoActions >= 16 && badgeGold) {
             if (badgeGold.classList.contains('locked')) {
                 badgeGold.classList.remove('locked');
@@ -268,7 +502,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function triggerBadgeMilestone(badgeName) {
-        // Create an alert inside the phone screen
         const alertDiv = document.createElement('div');
         alertDiv.style.position = 'absolute';
         alertDiv.style.top = '50px';
@@ -339,11 +572,8 @@ document.addEventListener('DOMContentLoaded', () => {
     presetBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const preset = btn.dataset.preset;
-            
-            // Close Scanner
             closeScannerView();
 
-            // Perform Mock Scan verification with slight delay to mimic camera read
             setTimeout(() => {
                 if (preset === 'campus-refill') {
                     logAction("Water Station #4 Scan", 25, 0.20);
@@ -355,4 +585,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 300);
         });
     });
+
+    // ======================================================================
+    // Intersection Observer for Survey Charts Scroll Animation
+    // ======================================================================
+    const surveyCharts = document.querySelector('.survey-charts-container');
+    if (surveyCharts) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const fills = entry.target.querySelectorAll('.chart-bar-fill');
+                    fills.forEach(fill => {
+                        const targetWidth = fill.getAttribute('data-width');
+                        if (targetWidth) {
+                            fill.style.width = targetWidth;
+                        }
+                    });
+                    observer.unobserve(entry.target); // Animate only once
+                }
+            });
+        }, { threshold: 0.15 });
+        observer.observe(surveyCharts);
+    }
 });

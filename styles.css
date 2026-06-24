@@ -2190,8 +2190,201 @@ button {
 }
 
 /* ==========================================================================
+   SDG Impact Calculator
+   ========================================================================= */
+.calculator-container {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 2.5rem;
+    padding: 1.5rem 0.5rem;
+}
+
+.calc-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.calc-inputs h4 {
+    font-size: 1.15rem;
+    color: var(--primary);
+}
+
+.calc-help {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.slider-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.slider-val {
+    color: var(--primary);
+    font-family: var(--font-outfit);
+    font-weight: 700;
+}
+
+.calc-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    outline: none;
+    border: 1px solid var(--border-glass);
+}
+
+.calc-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    transition: var(--transition);
+}
+
+.calc-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    background: var(--accent);
+}
+
+.calc-results {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.result-card {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.result-number {
+    font-family: var(--font-outfit);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1.1;
+}
+
+.result-unit {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+    font-weight: 500;
+}
+
+.calc-projection {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-glass);
+    padding-top: 1rem;
+    line-height: 1.4;
+}
+
+.calc-projection strong {
+    color: var(--primary);
+}
+
+/* ==========================================================================
+   Interactive Survey Charts
+   ========================================================================= */
+.survey-charts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin: 1rem 0;
+}
+
+.survey-chart-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.chart-label {
+    color: var(--text-muted);
+}
+
+.chart-value {
+    color: var(--primary);
+    font-family: var(--font-outfit);
+    font-weight: 700;
+}
+
+.chart-bar-bg {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--border-glass);
+    position: relative;
+}
+
+.chart-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    width: 0;
+    transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.fill-primary {
+    background: var(--primary);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.fill-danger {
+    background: var(--danger);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+.fill-info {
+    background: var(--info);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+/* ==========================================================================
    Responsive Research & SDG Adaptations
-   ========================================================================== */
+   ========================================================================= */
 @media (max-width: 992px) {
     .sdg-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -2201,8 +2394,136 @@ button {
     }
 }
 
+@media (max-width: 768px) {
+    .calculator-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
 @media (max-width: 576px) {
     .sdg-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* ==========================================================================
+   Premium Interaction Enhancements (Mobile & Calculator)
+   ========================================================================== */
+
+/* 1. Mock Phone Glare Reflection Pseudo-element */
+.phone-mockup::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle 140px at var(--glare-x, 50%) var(--glare-y, 35%), rgba(255, 255, 255, 0.08) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 15;
+    transition: background 0.05s ease;
+}
+
+/* 2. CSS Haptic Shake vibration keyframe */
+@keyframes phone-shake {
+    0%, 100% { transform: scale(1) translate(0, 0) rotate(0deg); }
+    20% { transform: scale(0.985) translate(-3px, 1px) rotate(-0.5deg); }
+    40% { transform: scale(1.005) translate(2px, -2px) rotate(0.5deg); }
+    60% { transform: scale(0.995) translate(-1px, 2px) rotate(-0.2deg); }
+    80% { transform: scale(1.000) translate(1px, -1px) rotate(0.2deg); }
+}
+.phone-mockup.haptic-shake {
+    animation: phone-shake 0.22s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+/* 3. Canvas Confetti Overlay absolutely positioned */
+#phone-confetti-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    pointer-events: none;
+}
+
+/* 4. Circular SDG Progress Gauge dashboard layout */
+.calc-gauge-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-glass);
+    margin-bottom: 0.5rem;
+}
+
+.calc-gauge-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.calc-gauge {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.gauge-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.035);
+    stroke-width: 8;
+}
+
+.gauge-fill {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 251.2;
+    stroke-dashoffset: 251.2;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.5s ease;
+}
+
+.gauge-text-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    width: 96px;
+    pointer-events: none;
+}
+
+.gauge-level-title {
+    font-family: var(--font-outfit);
+    font-weight: 700;
+    font-size: 0.72rem;
+    color: var(--primary);
+    line-height: 1.15;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    transition: color 0.3s ease;
+}
+
+.gauge-level-desc {
+    font-size: 0.55rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+    letter-spacing: 0.01em;
+}
+
+/* 5. Result Number Pop Scale Animation */
+@keyframes number-pulse-pop {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); color: var(--accent); text-shadow: 0 0 10px rgba(52, 211, 153, 0.5); }
+}
+
+.number-pop {
+    animation: number-pulse-pop 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    display: inline-block;
+}
+

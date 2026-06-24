@@ -461,6 +461,8 @@
                     <div class="phone-mockup">
                         <div class="phone-speaker"></div>
                         <div class="phone-screen">
+                            <!-- Canvas Confetti Overlay -->
+                            <canvas id="phone-confetti-canvas"></canvas>
                             <!-- Phone Status Bar -->
                             <div class="phone-status-bar">
                                 <span class="phone-time">20:30</span>
@@ -650,6 +652,7 @@
                 <div class="leaderboard-tabs">
                     <button class="tab-btn active" data-tab="teams">Teams</button>
                     <button class="tab-btn" data-tab="individuals">Individuals</button>
+                    <button class="tab-btn" data-tab="calculator"><i class="fa-solid fa-calculator"></i> Impact Calculator</button>
                 </div>
 
                 <div class="leaderboard-card glass-panel">
@@ -807,6 +810,84 @@
                             <span class="col-points">240 pts</span>
                         </div>
                     </div>
+
+                    <!-- Calculator View (Hidden by Default) -->
+                    <div class="leaderboard-rows display-none" id="leaderboard-calculator-view">
+                        <div class="calculator-container">
+                            <div class="calc-inputs">
+                                <h4>Estimate Your Sustainability Impact</h4>
+                                <p class="calc-help">Drag the sliders to adjust your weekly sustainable habits and see your projected impact.</p>
+                                
+                                <div class="slider-group">
+                                    <div class="slider-header">
+                                        <span>💧 Reusable Bottle Refills</span>
+                                        <span class="slider-val" id="val-refill">5</span>
+                                    </div>
+                                    <input type="range" min="0" max="30" value="5" class="calc-slider" id="slide-refill">
+                                </div>
+                                
+                                <div class="slider-group">
+                                    <div class="slider-header">
+                                        <span>♻️ Plastic Bottles Recycled</span>
+                                        <span class="slider-val" id="val-recycle">3</span>
+                                    </div>
+                                    <input type="range" min="0" max="20" value="3" class="calc-slider" id="slide-recycle">
+                                </div>
+                                
+                                <div class="slider-group">
+                                    <div class="slider-header">
+                                        <span>🚲 Green Commuting (km)</span>
+                                        <span class="slider-val" id="val-commute">10 km</span>
+                                    </div>
+                                    <input type="range" min="0" max="50" value="10" class="calc-slider" id="slide-commute">
+                                </div>
+                                
+                                <div class="slider-group">
+                                    <div class="slider-header">
+                                        <span>🍎 Food Waste Avoided</span>
+                                        <span class="slider-val" id="val-food">2</span>
+                                    </div>
+                                    <input type="range" min="0" max="14" value="2" class="calc-slider" id="slide-food">
+                                </div>
+                            </div>
+                            
+                            <div class="calc-results">
+                                <div class="calc-gauge-container">
+                                    <div class="calc-gauge-wrapper">
+                                        <svg class="calc-gauge" viewBox="0 0 100 100">
+                                            <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                                            <circle class="gauge-fill" id="calc-gauge-fill" cx="50" cy="50" r="40"></circle>
+                                        </svg>
+                                        <div class="gauge-text-container">
+                                            <span class="gauge-level-title" id="calc-gauge-level">Carbon Champion</span>
+                                            <span class="gauge-level-desc">Eco Status</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="results-grid">
+                                    <div class="result-card">
+                                        <span class="result-number" id="calc-co2">7.1</span>
+                                        <span class="result-unit">kg CO₂ Offset/wk</span>
+                                    </div>
+                                    <div class="result-card">
+                                        <span class="result-number" id="calc-plastic">8</span>
+                                        <span class="result-unit">Plastic Bottles Saved/wk</span>
+                                    </div>
+                                    <div class="result-card">
+                                        <span class="result-number" id="calc-waste">1.0</span>
+                                        <span class="result-unit">kg Food Waste Saved/wk</span>
+                                    </div>
+                                    <div class="result-card">
+                                        <span class="result-number" id="calc-points">470</span>
+                                        <span class="result-unit">Est. Ripple Points</span>
+                                    </div>
+                                </div>
+                                <div class="calc-projection">
+                                    <p>🌿 <strong>Annual Impact:</strong> You would offset approximately <strong id="calc-annual-co2">366.6 kg</strong> of CO₂ and save <strong id="calc-annual-plastic">416</strong> plastic bottles from landfills each year!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -827,13 +908,34 @@
                         <p class="pillar-desc">
                             Despite rising awareness, sustainable habit loops among urban youth in developing countries remain inconsistent. Intention exists, but reward loops and supporting infrastructure are absent.
                         </p>
-                        <div class="stats-box-mini">
-                            <div class="stat-box-val">77.3%</div>
-                            <div class="stat-box-lbl">Surveyed youth would adopt green habits if rewarded/engaging.</div>
-                        </div>
-                        <div class="stats-box-mini">
-                            <div class="stat-box-val">63.6%</div>
-                            <div class="stat-box-lbl">Cite poor accessibility & urban infrastructure as top barriers.</div>
+                        <div class="survey-charts-container">
+                            <div class="survey-chart-item">
+                                <div class="chart-header">
+                                    <span class="chart-label">Would adopt green habits if rewarded</span>
+                                    <span class="chart-value">77.3%</span>
+                                </div>
+                                <div class="chart-bar-bg">
+                                    <div class="chart-bar-fill fill-primary" data-width="77.3%"></div>
+                                </div>
+                            </div>
+                            <div class="survey-chart-item">
+                                <div class="chart-header">
+                                    <span class="chart-label">Identify poor infrastructure as top barrier</span>
+                                    <span class="chart-value">63.6%</span>
+                                </div>
+                                <div class="chart-bar-bg">
+                                    <div class="chart-bar-fill fill-danger" data-width="63.6%"></div>
+                                </div>
+                            </div>
+                            <div class="survey-chart-item">
+                                <div class="chart-header">
+                                    <span class="chart-label">Prefer gamified digital habit tracking</span>
+                                    <span class="chart-value">70.0%</span>
+                                </div>
+                                <div class="chart-bar-bg">
+                                    <div class="chart-bar-fill fill-info" data-width="70%"></div>
+                                </div>
+                            </div>
                         </div>
                         <p class="pillar-foot-details">
                             <strong>Global Toll:</strong> 1.05 billion tonnes of annual food waste (8–10% of global emissions) & 20 million metric tonnes of plastic environmental leakage.
