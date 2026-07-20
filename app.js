@@ -607,4 +607,69 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { threshold: 0.15 });
         observer.observe(surveyCharts);
     }
+
+    // ======================================================================
+    // Legal Information Modals
+    // Added by Rudra Sarker, Project Developer — Youth for Tomorrow
+    // Wires the footer anchors (#legal, #privacy, #terms, #cookies) to
+    // open the corresponding modal overlays instead of jumping to a
+    // non-existent anchor. Footer HTML is intentionally untouched.
+    // ======================================================================
+    const legalAnchors = [
+        { selector: 'a[href$="#legal"]',   overlayId: 'legal-overlay'   },
+        { selector: 'a[href$="#privacy"]',  overlayId: 'privacy-overlay'  },
+        { selector: 'a[href$="#terms"]',    overlayId: 'terms-overlay'    },
+        { selector: 'a[href$="#cookies"]',  overlayId: 'cookies-overlay'  }
+    ];
+
+    function openLegal(overlay) {
+        if (!overlay) return;
+        overlay.setAttribute('data-open', 'true');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        // Move focus into the modal for accessibility
+        const focusTarget = overlay.querySelector('.legal-close');
+        if (focusTarget) focusTarget.focus();
+    }
+
+    function closeLegal(overlay) {
+        if (!overlay) return;
+        overlay.setAttribute('data-open', 'false');
+        overlay.setAttribute('aria-hidden', 'true');
+        // Restore body scroll only if no other overlay is open
+        const anyOpen = document.querySelectorAll('.legal-overlay[data-open="true"]').length > 0;
+        if (!anyOpen) {
+            document.body.style.overflow = '';
+        }
+    }
+
+    legalAnchors.forEach(({ selector, overlayId }) => {
+        const overlay = document.getElementById(overlayId);
+        if (!overlay) return;
+
+        // Intercept footer link clicks
+        document.querySelectorAll(selector).forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                openLegal(overlay);
+            });
+        });
+
+        // Close on X button
+        overlay.querySelectorAll('[data-close-legal]').forEach(btn => {
+            btn.addEventListener('click', () => closeLegal(overlay));
+        });
+
+        // Close on backdrop click
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeLegal(overlay);
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && overlay.getAttribute('data-open') === 'true') {
+                closeLegal(overlay);
+            }
+        });
+    });
 });
